@@ -16,3 +16,8 @@ class SummarizerAgent:
             task=f"Summarize the content of {input_text}"
         )
         return chat_result.messages[-1].content
+
+# To USE
+# import asyncio
+# sa =  SummarizerAgent(model_name="llama3.1", system_message="Summarize the text .")
+# output = asyncio.run(sa.run("Hello"))
