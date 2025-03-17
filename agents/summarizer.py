@@ -37,3 +37,26 @@ class SummarizerAgent:
 # World War I had a profound impact on international relations, leading to the creation of new countries and the League of Nations."""
 
 # agent.stream(text)
+
+# OUTPUT
+# python3 agents/summarizer.py 
+# ================================ Human Message =================================
+
+# In the early 1900s, the world saw significant changes, particularly in technology, politics, and culture. 
+#     Innovations in transportation, such as automobiles and airplanes, revolutionized the way people lived. 
+#     New political ideologies like communism and fascism emerged, reshaping global power dynamics. 
+#     The arts also experienced a boom, with movements like modernism challenging traditional notions. 
+#     World War I had a profound impact on international relations, leading to the creation of new countries and the League of Nations.
+# ================================== Ai Message ==================================
+
+# Here is a summary of the text in 10-15 lines:
+
+# The early 1900s saw significant changes globally.
+# Technological advancements included cars and airplanes.
+# Transportation revolutionized people's lives.
+# New political ideologies emerged, including communism and fascism.
+# These ideologies reshaped global power dynamics.
+# The arts experienced a boom with modernism rising.
+# World War I had a profound impact on international relations.
+# It led to the creation of new countries and the League of Nations.
+# This period saw significant changes in politics, culture, and technology.
