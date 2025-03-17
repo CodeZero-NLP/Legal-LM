@@ -114,7 +114,7 @@ class WebContentRetriever:
             with_payload=True,
             limit=3
         ).points
-        print(search_results)
+        # print(search_results)
 
         return [
             {
