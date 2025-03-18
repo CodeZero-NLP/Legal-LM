@@ -1,308 +1,75 @@
-# agents/knowledge.py
-from typing import Dict, List, Any, Optional
-import requests
-import json
-from context_bank import ContextBank
-from utils.ollama_client import OllamaClient
-from utils.api_client import APIClient
-from utils.web_searcher import WebSearcher
-from utils.statute_finder import StatuteFinder
+from langchain_ollama import ChatOllama
 
-class KnowledgeAgent:
-    """
-    Knowledge Agent that retrieves relevant legal information, statutes,
-    precedents, and gold-standard documents to provide context for analysis.
-    """
+from langchain_core.messages import HumanMessage, SystemMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.prebuilt import create_react_agent
+
+from tools.web_content_retriever_tool import WebContentRetrieverTool
+
+class RAGKnowledgeAgent:
+    def __init__(self, model: str, memory: bool, config: dict):
+        self.model = ChatOllama(model=model)
+        if memory:
+            self.memory = MemorySaver()
+        self.config = config
+        self.webSearchTool = WebContentRetrieverTool()
+        self.agent_executor = create_react_agent(model=self.model, tools=[self.webSearchTool], checkpointer=self.memory)
     
-    def __init__(self, use_ollama: bool, model_name: str, context_bank: ContextBank):
-        """
-        Initialize the Knowledge Agent with its sub-components.
-        
-        Args:
-            use_ollama: Whether to use Ollama for local model inference
-            model_name: Name of the model to use
-            context_bank: Shared context bank for all agents
-        """
-        self.context_bank = context_bank
-        
-        # Initialize the appropriate client based on configuration
-        if use_ollama:
-            self.llm_client = OllamaClient(model_name)
-        else:
-            self.llm_client = APIClient(model_name)
-        
-        # Initialize sub-components
-        self.web_searcher = WebSearcher()
-        self.statute_finder = StatuteFinder()
-        
-        # System prompt for knowledge retrieval
-        self.knowledge_prompt = """
-        You are a Legal Knowledge Retrieval specialist. Your task is to:
-        1. Identify key legal concepts, statutes, and precedents relevant to the given legal text
-        2. Formulate precise search queries to find applicable laws and regulations
-        3. Extract the most relevant information from search results
-        4. Summarize the legal context that applies to the given text
-        
-        Be thorough, accurate, and focus on the most relevant legal information.
-        """
-    
-    def process(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Process the current state to retrieve relevant legal knowledge.
-        
-        Args:
-            state: Current state of the workflow
-            
-        Returns:
-            Dict: Updated state with retrieved knowledge
-        """
-        document_id = state.get("document_id")
-        document = self.context_bank.get_document(document_id)
-        clauses = self.context_bank.clauses.get(document_id, [])
-        
-        if not document or not clauses:
-            state["error"] = "Missing document or clauses for knowledge retrieval"
-            state["next_step"] = "orchestrator"
-            return state
-        
-        # Track retrieved knowledge
-        retrieved_laws = []
-        
-        # Process each clause to find relevant legal knowledge
-        for clause in clauses:
-            # Skip if already processed
-            if "knowledge_retrieved" in clause and clause["knowledge_retrieved"]:
-                continue
-                
-            # Identify relevant legal concepts for this clause
-            legal_concepts = self._identify_legal_concepts(clause["text"], clause["type"])
-            
-            # For each concept, retrieve relevant statutes and precedents
-            for concept in legal_concepts:
-                # Search for statutes
-                statutes = self._find_statutes(concept)
-                for statute in statutes:
-                    law_id = statute.get("id")
-                    if law_id:
-                        self.context_bank.add_law(
-                            law_id=law_id,
-                            content=statute.get("text", ""),
-                            source=statute.get("source", ""),
-                            metadata={
-                                "type": "statute",
-                                "jurisdiction": statute.get("jurisdiction", ""),
-                                "effective_date": statute.get("effective_date", ""),
-                                "related_clause_id": clause["id"]
-                            }
-                        )
-                        retrieved_laws.append(law_id)
-                
-                # Search for precedents
-                precedents = self._find_precedents(concept)
-                for precedent in precedents:
-                    law_id = precedent.get("id")
-                    if law_id:
-                        self.context_bank.add_law(
-                            law_id=law_id,
-                            content=precedent.get("text", ""),
-                            source=precedent.get("source", ""),
-                            metadata={
-                                "type": "precedent",
-                                "court": precedent.get("court", ""),
-                                "date": precedent.get("date", ""),
-                                "related_clause_id": clause["id"]
-                            }
-                        )
-                        retrieved_laws.append(law_id)
-            
-            # Mark this clause as processed
-            clause["knowledge_retrieved"] = True
-        
-        # Update the state with knowledge retrieval results
-        state["knowledge_retrieved"] = True
-        state["retrieved_laws"] = retrieved_laws
-        state["next_step"] = "compliance"  # Next, check for compliance issues
-        
-        return state
-    
-    def _identify_legal_concepts(self, clause_text: str, clause_type: str) -> List[Dict[str, Any]]:
-        """
-        Identify key legal concepts in a clause that need further research.
-        
-        Args:
-            clause_text: Text of the clause
-            clause_type: Type/classification of the clause
-            
-        Returns:
-            List: Legal concepts identified in the clause
-        """
-        # Prepare the input for the LLM
-        input_text = f"""
-        Clause Text: {clause_text}
-        Clause Type: {clause_type}
-        
-        Identify the key legal concepts in this clause that require retrieval of relevant statutes and precedents.
-        For each concept, provide:
-        1. The concept name
-        2. Relevant jurisdiction (if apparent)
-        3. Specific legal areas involved
-        4. Keywords for searching statutes and precedents
-        """
-        
-        # Get concepts from LLM
-        response = self.llm_client.generate(
-            system_prompt=self.knowledge_prompt,
-            user_prompt=input_text
-        )
-        
-        # Parse the response to extract concepts
-        # This is a simplified implementation - in a real system, you'd want more robust parsing
-        concepts = []
-        current_concept = {}
-        
-        for line in response.strip().split('\n'):
-            if line.startswith('Concept:') or line.startswith('- Concept:'):
-                if current_concept and 'name' in current_concept:
-                    concepts.append(current_concept)
-                current_concept = {"name": line.split(':', 1)[1].strip()}
-            elif line.startswith('Jurisdiction:') or line.startswith('- Jurisdiction:'):
-                current_concept["jurisdiction"] = line.split(':', 1)[1].strip()
-            elif line.startswith('Legal Areas:') or line.startswith('- Legal Areas:'):
-                current_concept["legal_areas"] = line.split(':', 1)[1].strip()
-            elif line.startswith('Keywords:') or line.startswith('- Keywords:'):
-                current_concept["keywords"] = line.split(':', 1)[1].strip()
-        
-        # Add the last concept if it exists
-        if current_concept and 'name' in current_concept:
-            concepts.append(current_concept)
-        
-        return concepts
-    
-    def _find_statutes(self, legal_concept: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Find relevant statutes for a legal concept.
-        
-        Args:
-            legal_concept: Legal concept to search for
-            
-        Returns:
-            List: Relevant statutes
-        """
-        # Prepare search query
-        jurisdiction = legal_concept.get("jurisdiction", "federal")
-        keywords = legal_concept.get("keywords", legal_concept.get("name", ""))
-        
-        # Use the statute finder to search for relevant statutes
-        statutes = self.statute_finder.search(
-            keywords=keywords,
-            jurisdiction=jurisdiction
-        )
-        
-        return statutes
-    
-    def _find_precedents(self, legal_concept: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Find relevant precedents for a legal concept.
-        
-        Args:
-            legal_concept: Legal concept to search for
-            
-        Returns:
-            List: Relevant precedents
-        """
-        # Prepare search query
-        keywords = legal_concept.get("keywords", legal_concept.get("name", ""))
-        
-        # Use web searcher to find precedents
-        search_query = f"{keywords} legal precedent case law"
-        search_results = self.web_searcher.search(search_query)
-        
-        # Process search results to extract precedents
-        precedents = []
-        for result in search_results:
-            # Check if the result appears to be a legal case
-            if self._is_legal_precedent(result["title"], result["snippet"]):
-                precedents.append({
-                    "id": f"precedent_{len(precedents)}",
-                    "title": result["title"],
-                    "text": result["snippet"],
-                    "source": result["url"],
-                    "court": self._extract_court(result["title"], result["snippet"]),
-                    "date": self._extract_date(result["title"], result["snippet"])
-                })
-        
-        return precedents
-    
-    def _is_legal_precedent(self, title: str, snippet: str) -> bool:
-        """
-        Determine if a search result is likely a legal precedent.
-        
-        Args:
-            title: Title of the search result
-            snippet: Snippet of the search result
-            
-        Returns:
-            bool: True if the result appears to be a legal precedent
-        """
-        # Check for common patterns in legal case citations
-        case_patterns = [
-            "v.", "vs.", "versus",
-            "court", "supreme court", "circuit", "district court",
-            "case", "opinion", "decision", "ruling"
-        ]
-        
-        # Check if any pattern is in the title or snippet
-        for pattern in case_patterns:
-            if pattern.lower() in title.lower() or pattern.lower() in snippet.lower():
-                return True
-        
-        return False
-    
-    def _extract_court(self, title: str, snippet: str) -> str:
-        """
-        Extract the court name from a precedent.
-        
-        Args:
-            title: Title of the precedent
-            snippet: Snippet of the precedent
-            
-        Returns:
-            str: Extracted court name or empty string
-        """
-        # Common court names to look for
-        court_patterns = [
-            "Supreme Court", "Circuit Court", "District Court",
-            "Court of Appeals", "Federal Court", "State Court"
-        ]
-        
-        # Check for court names in title and snippet
-        combined_text = f"{title} {snippet}"
-        for court in court_patterns:
-            if court in combined_text:
-                return court
-        
-        return ""
-    
-    def _extract_date(self, title: str, snippet: str) -> str:
-        """
-        Extract the date from a precedent.
-        
-        Args:
-            title: Title of the precedent
-            snippet: Snippet of the precedent
-            
-        Returns:
-            str: Extracted date or empty string
-        """
-        # This is a simplified implementation
-        # In a real system, you'd want to use regex or a date extraction library
-        import re
-        
-        # Look for year patterns (1900-2099)
-        combined_text = f"{title} {snippet}"
-        year_match = re.search(r'\b(19|20)\d{2}\b', combined_text)
-        
-        if year_match:
-            return year_match.group(0)
-        
-        return ""
+    def stream(self, text: str):
+        for step in self.agent_executor.stream(
+            {"messages": [
+                SystemMessage(content="YOU ARE A KNOWLEDGE RETRIEVER AGENT. YOU ARE SUPPOSED TO EXTRACT INFORMATION USING THE TOOLS GIVEN TO YOU (web_content_retriever). ALWAYS PREFER WEBSITES LIKE CONGRESS.GOV OR GOVINFO. SUMMARIZE THE ACTS AND WHAT THEY MEAN IN APPROPRIATE NUMBER OF SENTENCES."),
+                HumanMessage(content=f"LAWS AND REGULATION ABOUT [{text}] site: congress.gov")
+            ]},
+            config=self.config,
+            stream_mode="values"
+        ):
+            step["messages"][-1].pretty_print()
+
+# ##############################################################################
+# # USAGE GUIDE
+# ##############################################################################
+# model_name = "llama3.1"
+# config = {"configurable": {"thread_id": "abc123"}}
+# agent = RAGKnowledgeAgent(model=model_name, memory=True, config=config)
+
+# text = "unfair or deceptive acts or practices in transactions relating to tokens"
+
+# agent.stream(text)
+
+# ##############################################################################
+# # OUTPUT
+# ##############################################################################
+# python3 agents/knowledge.py 
+# ================================ Human Message =================================
+
+# LAWS AND REGULATION ABOUT [unfair or deceptive acts or practices in transactions relating to tokens] site: congress.gov
+# ================================== Ai Message ==================================
+# Tool Calls:
+#   web_content_retriever (ecae4a13-e135-4bc4-85b4-1f2e6a840f75)
+#  Call ID: ecae4a13-e135-4bc4-85b4-1f2e6a840f75
+#   Args:
+#     query: LAWS AND REGULATION ABOUT unfair or deceptive acts or practices in transactions relating to tokens site:congress.gov
+# Scraping content from: https://www.congress.gov/crs-product/IF12244
+# Stored content from: https://www.congress.gov/crs-product/IF12244 in Qdrant
+# Scraping content from: https://www.congress.gov/crs_external_products/IF/PDF/IF12244/IF12244.1.pdf
+# Stored content from: https://www.congress.gov/crs_external_products/IF/PDF/IF12244/IF12244.1.pdf in Qdrant
+# Scraping content from: https://www.congress.gov/114/plaws/publ258/PLAW-114publ258.pdf
+# Some characters could not be decoded, and were replaced with REPLACEMENT CHARACTER.
+# Stored content from: https://www.congress.gov/114/plaws/publ258/PLAW-114publ258.pdf in Qdrant
+
+# ================================== Ai Message ==================================
+
+# Based on the text, it appears to be a snippet from the Federal Acquisition Regulation (FAR) related to commercial products and services procurement. The main topics covered in this snippet are:
+
+# 1. Evaluation of Offers: The FAR describes how to evaluate offers for commercial products or services, including selecting the most advantageous offer based on factors contained in the solicitation.
+# 2. Combined Synopsis/Solicitation Procedure: This procedure combines the synopsis required by 5.203 and the issuance of the solicitation into a single document. The contracting officer must prepare a synopsis as described at 5.207, including additional information such as the solicitation number, evaluation criteria, and contract terms.
+
+# The snippet provides guidance on how to conduct procurements for commercial products or services, emphasizing the importance of following proper procedures to ensure fair and transparent evaluations.
+
+# To answer the user's question "What are the key points related to commercial products in this text?", I would extract the following key points:
+
+# * Evaluation of Offers: The FAR describes how to evaluate offers for commercial products or services.
+# * Combined Synopsis/Solicitation Procedure: This procedure combines the synopsis required by 5.203 and the issuance of the solicitation into a single document.
+
+# These two points capture the main ideas related to commercial products in this text.

@@ -4,6 +4,9 @@ legal-lm/
 env/
 .env
 
+# Vectorstore
+qdrant_storage
+
 # Python
 __pycache__/
 *.py[cod]
