@@ -1,5 +1,4 @@
-from ollama_client import OllamaClient
-from document_parser import DocumentParser
+from utils.ollama_client import OllamaClient
 from langchain_core.messages import SystemMessage, HumanMessage
 import json
 
@@ -27,18 +26,13 @@ Output Format:
 }
 """
 
-def extract_text_from_pdf(pdf_path: str) -> str:
-    parser = DocumentParser()
-    _, text = parser.parse_pdf(pdf_path)
-    return text
 
-def process_document(pdf_path: str):
+def process_document(text: str):
     client = OllamaClient(model_name="llama2")
-    document_text = extract_text_from_pdf(pdf_path)
-
+   
     messages = [
         SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content=f"Contract document:\n\n{document_text}")
+        HumanMessage(content=f"Contract document:\n\n{text}")
     ]
 
     result = client.invoke(messages)
