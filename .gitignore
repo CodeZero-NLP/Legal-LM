@@ -35,3 +35,6 @@ wheels/
 *.swp
 *.swo
 .DS_Store 
+
+# Specific files to ignore
+/agents/utils/roberta_classifier.py

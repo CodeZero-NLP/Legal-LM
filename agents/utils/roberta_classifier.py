@@ -3,7 +3,7 @@ import torch
 
 class TextClassifier:
     def __init__(self):
-        # token = ""
+        token = ""
         self.tokenizer = AutoTokenizer.from_pretrained('nlpaueb/legal-bert-base-uncased')
         self.model = AutoModelForSequenceClassification.from_pretrained('nlpaueb/legal-bert-base-uncased')        
 
