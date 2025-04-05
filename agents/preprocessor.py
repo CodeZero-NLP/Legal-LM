@@ -2,6 +2,7 @@
 from utils.document_parser import DocumentParser
 from utils.roberta_classifier import TextClassifier
 from utils.ner import NERModel
+import utils.system_prompt as system_prompt
 from utils.clause_extractor import ClauseExtractor
 import uuid
 
@@ -15,10 +16,16 @@ class PreprocessorAgent:
     def process_document(self, file_path: str):
         document_id = str(uuid.uuid4())
         title, text, *_ = self.document_parser.parse_pdf(file_path)
-        clauses = self.clause_extractor.extract_clauses(text)
-        document_class = self.text_classifier.classify_document_type(text, title)
 
-        clause_classes = self.text_classifier.classify_clauses(clauses)
+        # clauses = self.clause_extractor.extract_clauses(text)
+        # document_class = self.text_classifier.classify_document_type(text, title)
+        # clause_classes = self.text_classifier.classify_clauses(clauses)
+        llm_output = system_prompt.process_document(text)
+
+        document_class = llm_output.get("CLASS", "")
+        clause_classes = llm_output.get("CLAUSES", [])
+
+        
         entities = self.ner_agent.extract_entities(text)
 
         self.context_bank.add_document(document_id, text, {
@@ -35,7 +42,7 @@ class PreprocessorAgent:
             "Text Extracted" : text,
             "Document Title": title,
             "Document Class": document_class,
-            "Important Clauses": {clause: clause_classes[i] for i, clause in enumerate(clauses)},
+            "Important Clauses": {clause["Text"]: clause["Category"] for clause in clause_classes},
             "Named Entities": entities
         }
 
