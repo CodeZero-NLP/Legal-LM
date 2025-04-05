@@ -3,6 +3,7 @@ from utils.document_parser import DocumentParser
 from utils.roberta_classifier import TextClassifier
 from utils.ner import NERModel
 from utils.clause_extractor import ClauseExtractor
+import uuid
 
 class PreprocessorAgent:
     def __init__(self):
@@ -12,6 +13,7 @@ class PreprocessorAgent:
         self.clause_extractor = ClauseExtractor()
 
     def process_document(self, file_path: str):
+        document_id = str(uuid.uuid4())
         title, text, *_ = self.document_parser.parse_pdf(file_path)
         clauses = self.clause_extractor.extract_clauses(text)
         document_class = self.text_classifier.classify_document_type(text, title)
@@ -19,11 +21,21 @@ class PreprocessorAgent:
         clause_classes = self.text_classifier.classify_clauses(clauses)
         entities = self.ner_agent.extract_entities(text)
 
+        self.context_bank.add_document(document_id, text, {
+            "title": title,
+            "document_type": document_class,
+            "source_file": file_path
+        })
+
+        self.context_bank.add_entities(document_id, entities)
+        self.context_bank.add_clauses(document_id, clause_classes)
+
+
         return {
             "Text Extracted" : text,
             "Document Title": title,
             "Document Class": document_class,
-            "Important Clauses": "Extracted Clauses": {clause: clause_classes[i] for i, clause in enumerate(clauses)},
+            "Important Clauses": {clause: clause_classes[i] for i, clause in enumerate(clauses)},
             "Named Entities": entities
         }
 
