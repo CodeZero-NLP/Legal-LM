@@ -88,9 +88,9 @@ class ClauseRewriterAgent:
             # For internal contradictions, we need both clauses
             if contradiction_type == "internal":
                 clause1_id = contradiction.get("clause1_id")
-                clause1_text = contradiction.get("clause1_text")
+                clause1_text = contradiction.get("clause1_text", "")
                 clause2_id = contradiction.get("clause2_id")
-                clause2_text = contradiction.get("clause2_text")
+                clause2_text = contradiction.get("clause2_text", "")
                 
                 # Rewrite both clauses to resolve the internal contradiction
                 rewritten_clause1 = self._rewrite_clause(
@@ -136,10 +136,10 @@ class ClauseRewriterAgent:
             else:
                 # Get relevant laws for context
                 relevant_laws = []
-                if contradiction_type == "statutory":
+                if contradiction_type == "statutory" and self.context_bank.laws:
                     relevant_laws = [law for law_id, law in self.context_bank.laws.items() 
                                     if law.get("metadata", {}).get("type") == "statute"]
-                elif contradiction_type == "precedent":
+                elif contradiction_type == "precedent" and self.context_bank.laws:
                     relevant_laws = [law for law_id, law in self.context_bank.laws.items() 
                                     if law.get("metadata", {}).get("type") == "precedent"]
                 
