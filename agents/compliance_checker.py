@@ -1,16 +1,17 @@
 # agents/compliance_checker.py
-from typing import Dict, List, Any, Optional
-import uuid
+import logging
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 from context_bank import ContextBank
-from utils.ollama_client import OllamaClient
-from utils.api_client import APIClient
+from .utils.ollama_client import OllamaClient
+from .utils.api_client import APIClient
 
 from agents.tools.statutory_validator import validate_statutory_compliance, SeverityLevel
-from agents.tools.precedent_analyzer import analyze_precedents_for_compliance
+from agents.tools.precedent_analyzer import PrecedentAnalyzer
 from agents.tools.consistency_engine import check_contractual_consistency
-from agents.tools.hypergraph_analyzer import analyze_hypergraph_structure
+from agents.tools.hypergraph_analyzer import HypergraphAnalyzer
+from agents.knowledge import RAGKnowledgeAgent
 
 
 # Rewrite the check_legal_compliance function.
@@ -19,6 +20,7 @@ from agents.tools.hypergraph_analyzer import analyze_hypergraph_structure
 # The document metadata as well as the complete document should be obtained 
 # from the context bank along with the clauses, the entities and, the laws.
 # The knowledge_from_vector_db will include all the information retrieved from the vector database
+# Jurisdiction will be obtained from the context_bank
 
 
 def check_legal_compliance(
