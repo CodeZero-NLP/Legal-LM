@@ -13,13 +13,19 @@ from agents.tools.consistency_engine import check_contractual_consistency
 from agents.tools.hypergraph_analyzer import analyze_hypergraph_structure
 
 
+# Rewrite the check_legal_compliance function.
+# It should only take the following arguments:
+# context bank, knowledge_from_vector_db, use_ollama as a bool, model_name, min_confidence as a float
+# The document metadata as well as the complete document should be obtained 
+# from the context bank along with the clauses, the entities and, the laws.
+# The knowledge_from_vector_db will include all the information retrieved from the vector database
+
+
 def check_legal_compliance(
-    clauses: List[Dict[str, Any]],
-    document_metadata: Dict[str, Any],
     context_bank: ContextBank,
-    knowledge_agent = None,
-    use_ollama: bool = True,
-    model_name: str = "llama3.1:latest",
+    knowledge_from_vector_db: List[Dict[str, Any]],
+    use_ollama: bool = False,
+    model_name: str = "gemini-2.0-flash",
     min_confidence: float = 0.75
 ) -> List[Dict[str, Any]]:
     """
@@ -29,10 +35,8 @@ def check_legal_compliance(
     It checks each clause against statutory regulations, legal precedents, and for internal consistency.
     
     Args:
-        clauses: List of clause dictionaries, each containing at least 'id' and 'text' keys
-        document_metadata: Metadata about the document (jurisdiction, document_type, etc.)
-        context_bank: Shared context bank for storing and retrieving information
-        knowledge_agent: Optional knowledge agent for retrieving legal information
+        context_bank: Shared context bank containing document, clauses, entities, and laws
+        knowledge_from_vector_db: Information retrieved from the vector database using search_in_qdrant
         use_ollama: Whether to use Ollama for local model inference (default: True)
         model_name: Name of the model to use (default: "llama3.1:latest")
         min_confidence: Minimum confidence threshold for valid issues (default: 0.75)
@@ -44,16 +48,116 @@ def check_legal_compliance(
     if use_ollama:
         llm_client = OllamaClient(model_name)
     else:
-        llm_client = APIClient(model_name)
+        llm_client = APIClient("gemini-2.0-flash")
         
-    # Extract document information
-    document_id = document_metadata.get("document_id", str(uuid.uuid4()))
-    jurisdiction = document_metadata.get("jurisdiction", "US")
-    document_type = document_metadata.get("document_type", "contract")
+    
+    # Find the active document ID (assuming it's stored or retrievable)
+    document_ids = list(context_bank.documents.keys())
+    if not document_ids:
+        return []  # No documents to analyze
+    
+    # For simplicity, use the first document if multiple exist
+    # In a production environment, you might want to analyze all or use a specific one
+    document_id = document_ids[0]
+    
+    # Extract document information from context bank
+    document = context_bank.get_document(document_id)
+    if not document:
+        return []  # Document not found
+    
+    # Get document content
+    document_content = document.get("content", "")
+    if not document_content:
+        return []  # Empty document
+    
+    # Use LLM to estimate jurisdiction and document type instead of relying on metadata
+    doc_analysis_prompt = f"""
+    Analyze the following legal document excerpt. Determine:
+    1. The most likely jurisdiction (e.g., US, UK, EU, etc.)
+    2. The type of legal document (e.g., contract, policy, regulation, etc.)
+    
+    Format your response as a JSON with keys 'jurisdiction' and 'document_type'.
+    
+    Document excerpt:
+    {document_content[:2000]}  # Use first 2000 chars for analysis
+    """
+    
+    doc_analysis_response = llm_client.query(doc_analysis_prompt)
+    
+    # Extract jurisdiction and document type from LLM response
+    # Default to US jurisdiction and contract type if parsing fails
+    try:
+        import json
+        doc_analysis = json.loads(doc_analysis_response)
+        jurisdiction = doc_analysis.get("jurisdiction", "US")
+        document_type = doc_analysis.get("document_type", "contract")
+    except:
+        # Default values if parsing fails
+        jurisdiction = "US"
+        document_type = "contract"
+    
+    # Get clauses from context bank
+    clauses = context_bank.clauses.get(document_id, [])
+    if not clauses:
+        return []  # No clauses to analyze
+    
+    # Get entities from context bank
+    entities = context_bank.entities.get(document_id, [])
+    
+    # Get laws from context bank
+    laws = {}
+    for law_id, law_data in context_bank.laws.items():
+        if law_data.get("metadata", {}).get("document_id") == document_id:
+            laws[law_id] = law_data
     
     # Prepare results container
     all_issues = []
     non_compliant_clauses = []
+    
+    # Prepare knowledge context from vector database
+    # Initialize with empty lists to handle the case where vector DB has no statutes/precedents
+    knowledge_context = {
+        "vector_db_results": knowledge_from_vector_db,
+        "statutes": [],
+        "precedents": []
+    }
+    
+    # Only attempt to extract statutes and precedents if knowledge_from_vector_db has content
+    if knowledge_from_vector_db:
+        # Use LLM to classify each knowledge item as statute or precedent
+        for item in knowledge_from_vector_db:
+            content = item.get("content", "")
+            title = item.get("title", "")
+            
+            if not content and not title:
+                continue
+            
+            # Use LLM to classify the knowledge item
+            classification_prompt = f"""
+            Determine if the following legal text is more likely to be a statute/regulation or a legal precedent/case law.
+            
+            Title: {title}
+            Content excerpt: {content[:500]}
+            
+            Respond with only one word: either "statute" or "precedent".
+            """
+            
+            classification = llm_client.query(classification_prompt).strip().lower()
+            
+            if "statute" in classification or "regulation" in classification or "code" in classification:
+                knowledge_context["statutes"].append({
+                    "title": title,
+                    "content": content,
+                    "url": item.get("url", ""),
+                    "score": item.get("score", 0.0)
+                })
+            else:
+                knowledge_context["precedents"].append({
+                    "title": title,
+                    "content": content,
+                    "url": item.get("url", ""),
+                    "score": item.get("score", 0.0)
+                })
     
     # Process each clause for compliance issues
     for clause in clauses:
@@ -68,67 +172,39 @@ def check_legal_compliance(
             "document_id": document_id,
             "jurisdiction": jurisdiction,
             "document_type": document_type,
-            "clauses": [c for c in clauses if c.get("id") != clause_id]
+            "clauses": [c for c in clauses if c.get("id") != clause_id],
+            "entities": entities,
+            "knowledge_context": knowledge_context
         }
         
-        # Get relevant knowledge from knowledge agent if available
-        knowledge_context = {}
-        if knowledge_agent:
-            try:
-                # Retrieve relevant statutes
-                statutes = knowledge_agent.find_relevant_statutes(
-                    query=clause_text,
-                    jurisdiction=jurisdiction
-                )
-                
-                # Retrieve relevant precedents
-                precedents = knowledge_agent.find_relevant_precedents(
-                    query=clause_text,
-                    jurisdiction=jurisdiction
-                )
-                
-                knowledge_context = {
-                    "statutes": statutes,
-                    "precedents": precedents
-                }
-                
-                # Store in context bank for future use
-                context_bank.store(
-                    key=f"knowledge:{clause_id}",
-                    value=knowledge_context
-                )
-                
-            except Exception as e:
-                print(f"Error retrieving knowledge: {e}")
+        # 1. Check statutory compliance - only if statutes are available
+        statutory_violations = []
+        if knowledge_context["statutes"]:
+            statutory_violations = validate_statutory_compliance(
+                clause_text=clause_text,
+                llm_client=llm_client,
+                clause_id=clause_id,
+                jurisdiction=jurisdiction,
+                knowledge_context=knowledge_context["statutes"],
+                min_confidence=min_confidence
+            )
         
-        # Add knowledge context to document context
-        if knowledge_context:
-            document_context["knowledge_context"] = knowledge_context
-        
-        # 1. Check statutory compliance
-        statutory_violations = validate_statutory_compliance(
-            clause_text=clause_text,
-            llm_client=llm_client,
-            clause_id=clause_id,
-            jurisdiction=jurisdiction,
-            knowledge_agent=knowledge_agent,
-            min_confidence=min_confidence
-        )
-        
-        # 2. Check precedent compliance
-        precedent_context = knowledge_context.get("precedents", [])
-        precedent_analysis = analyze_precedents_for_compliance(
-            clause_text=clause_text,
-            llm_client=llm_client,
-            jurisdiction=jurisdiction,
-            context={
-                "precedents": precedent_context,
-                **document_context
-            } if precedent_context else document_context,
-            min_confidence=min_confidence,
-            use_web_search=False
-        )
-        precedent_issues = precedent_analysis.get("issues", [])
+        # 2. Check precedent compliance - only if precedents are available
+        precedent_issues = []
+        if knowledge_context["precedents"]:
+            precedent_context = knowledge_context["precedents"]
+            precedent_analysis = analyze_precedents_for_compliance(
+                clause_text=clause_text,
+                llm_client=llm_client,
+                jurisdiction=jurisdiction,
+                context={
+                    "precedents": precedent_context,
+                    **document_context
+                },
+                min_confidence=min_confidence,
+                use_web_search=False
+            )
+            precedent_issues = precedent_analysis.get("issues", [])
         
         # 3. Check contractual consistency
         # First, prepare the clauses list for consistency check
@@ -253,7 +329,9 @@ def check_legal_compliance(
         "non_compliant_clauses": len(non_compliant_clauses),
         "total_issues": sum(clause["issue_count"] for clause in non_compliant_clauses),
         "has_issues": len(non_compliant_clauses) > 0,
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.now().isoformat(),
+        "estimated_jurisdiction": jurisdiction,
+        "estimated_document_type": document_type
     }
     
     context_bank.store(
@@ -263,73 +341,3 @@ def check_legal_compliance(
     
     # Return the list of non-compliant clauses
     return non_compliant_clauses
-
-
-# Legacy class maintained for backward compatibility
-class ComplianceCheckerAgent:
-    """
-    Legacy Compliance Checker Agent class maintained for backward compatibility.
-    New code should use the check_legal_compliance function instead.
-    """
-    
-    def __init__(self, use_ollama: bool, model_name: str, context_bank: ContextBank, 
-                 min_confidence: float = 0.75, knowledge_agent=None):
-        self.use_ollama = use_ollama
-        self.model_name = model_name
-        self.context_bank = context_bank
-        self.min_confidence = min_confidence
-        self.knowledge_agent = knowledge_agent
-        
-        # Initialize client
-        if use_ollama:
-            self.llm_client = OllamaClient(model_name)
-        else:
-            self.llm_client = APIClient(model_name)
-    
-    def process(self, state: Dict[str, Any]) -> Dict[str, Any]:
-        """Process a document state to check for compliance issues."""
-        # Extract document info from state
-        document_id = state.get("document_id")
-        if not document_id:
-            state["error"] = "Missing document_id in state"
-            state["next_step"] = "orchestrator"
-            return state
-            
-        # Retrieve document and clauses from context bank
-        document = self.context_bank.get_document(document_id)
-        clauses = self.context_bank.clauses.get(document_id, [])
-        
-        if not document or not clauses:
-            state["error"] = "Document or clauses not found in context bank"
-            state["next_step"] = "orchestrator"
-            return state
-        
-        # Create document metadata dict
-        document_metadata = {
-            "document_id": document_id,
-            "jurisdiction": document.get("metadata", {}).get("jurisdiction", "US"),
-            "document_type": document.get("metadata", {}).get("document_type", "contract")
-        }
-        
-        # Call the new function to perform compliance checking
-        non_compliant_clauses = check_legal_compliance(
-            clauses=clauses,
-            document_metadata=document_metadata,
-            context_bank=self.context_bank,
-            knowledge_agent=self.knowledge_agent,
-            use_ollama=self.use_ollama,
-            model_name=self.model_name,
-            min_confidence=self.min_confidence
-        )
-        
-        # Update state for next agent
-        state["compliance_analyzed"] = True
-        state["has_issues"] = len(non_compliant_clauses) > 0
-        
-        # Determine next step based on whether issues were found
-        if state["has_issues"]:
-            state["next_step"] = "clause_rewriter"  # Send to rewriter if there are issues
-        else:
-            state["next_step"] = "post_processor"   # Send to post-processor if no issues
-            
-        return state

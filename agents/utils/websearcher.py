@@ -120,7 +120,6 @@ class WebContentRetriever:
             {
                 "title": result.payload["title"],
                 "content": result.payload["content"],
-                "url": result.payload["url"],
                 "score": result.score
             }
             for result in search_results
