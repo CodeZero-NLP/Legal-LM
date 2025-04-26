@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 
-from utils.hypergraph import LegalHypergraph
-from utils.dependency_analyzer import DependencyAnalyzer
-from utils.ollama_client import OllamaClient
+from agents.utils.hypergraph import LegalHypergraph
+from agents.utils.dependency_analyzer import DependencyAnalyzer
+from agents.utils.ollama_client import OllamaClient
 
 
 @dataclass

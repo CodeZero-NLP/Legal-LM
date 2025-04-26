@@ -3,12 +3,12 @@ import uuid
 from enum import Enum
 from dataclasses import dataclass
 
-from utils.ollama_client import OllamaClient
-from utils.prompt_templates import PromptTemplates
-from utils.response_parser import ResponseParser
-from utils.confidence_scorer import ConfidenceScorer
-from utils.dependency_analyzer import DependencyAnalyzer
-from utils.hypergraph import LegalHypergraph
+from agents.utils.ollama_client import OllamaClient
+from agents.utils.prompt_templates import PromptTemplates
+from agents.utils.response_parser import ResponseParser
+from agents.utils.confidence_scorer import ConfidenceScorer
+from agents.utils.dependency_analyzer import DependencyAnalyzer
+from agents.utils.hypergraph import LegalHypergraph
 
 
 @dataclass

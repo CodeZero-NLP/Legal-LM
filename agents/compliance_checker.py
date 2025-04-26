@@ -347,18 +347,16 @@ def _analyze_clause_compliance(
     if knowledge_context["precedents"]:
         logger.info(f"Checking precedent compliance against {len(knowledge_context['precedents'])} precedents")
         try:
-            precedent_analysis = analyze_precedents_for_compliance(
+            # Call the implemented function
+            precedent_issues = analyze_precedents_for_compliance(
                 clause_text=clause_text,
                 llm_client=llm_client,
+                clause_id=clause_id, # Pass clause_id
                 jurisdiction=jurisdiction,
-                context={
-                    "precedents": knowledge_context["precedents"],
-                    "document_type": document_type
-                },
-                min_confidence=min_confidence,
-                use_web_search=False
+                document_type=document_type, # Pass document_type
+                knowledge_context=knowledge_context["precedents"], # Pass only precedents
+                min_confidence=min_confidence
             )
-            precedent_issues = precedent_analysis.get("issues", [])
             logger.info(f"Found {len(precedent_issues)} precedent issues")
         except Exception as e:
             logger.error(f"Error in precedent analysis: {str(e)}")
@@ -448,11 +446,10 @@ def _analyze_clause_compliance(
             "confidence": violation.confidence
         })
     
-    # Add precedent issues
-    for issue in precedent_issues:
-        issue["type"] = "precedent"
-        clause_issues.append(issue)
-    
+    # Add precedent issues (now directly a list of dicts)
+    precedent_issues_count = len(precedent_issues) # Get count before extending
+    clause_issues.extend(precedent_issues)
+
     # Add consistency issues (already has type set)
     clause_issues.extend(consistency_issues)
     
@@ -464,7 +461,7 @@ def _analyze_clause_compliance(
             "issues": clause_issues,
             "issue_count": len(clause_issues),
             "statutory_violations": len(statutory_violations),
-            "precedent_issues": len(precedent_issues),
+            "precedent_issues": precedent_issues_count, # Use the count variable
             "consistency_issues": len(consistency_issues)
         }
 
@@ -482,7 +479,7 @@ def _analyze_clause_compliance(
             "clause_id": clause_id,
             "clause_text": clause_text,
             "statutory_violations": [v.__dict__ for v in statutory_violations],
-            "precedent_issues": precedent_issues,
+            "precedent_issues": precedent_issues, # Store the actual issues list
             "consistency_issues": consistency_issues,
             "hypergraph_analysis": hypergraph_analysis,
             "all_issues": clause_issues,
