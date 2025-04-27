@@ -6,3 +6,6 @@ class OllamaClient:
     
     def invoke(self, input):
         return self.ollama_client.invoke(input)
+    
+    def query(self, input):
+        return self.ollama_client.invoke(input)

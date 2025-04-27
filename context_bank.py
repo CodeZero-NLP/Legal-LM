@@ -177,3 +177,30 @@ class ContextBank:
             List[Dict[str, Any]]: A list of non-compliant clauses.
         """
         return self.non_compliant_clauses
+    
+    def get_all(self) -> Dict[str, Any]:
+        """
+        Get all data currently stored in the context bank.
+        
+        Returns:
+            Dict[str, Any]: A dictionary containing all stored data.
+        """
+        return {
+            "document": self.document,
+            "entities": self.entities,
+            "clauses": self.clauses,
+            "laws": self.laws,
+            "jurisdiction": self.jurisdiction,
+            "clause_compliance_results": self.clause_compliance_results,
+            "document_analysis": self.document_analysis,
+            "non_compliant_clauses": self.non_compliant_clauses
+        }
+    
+    def get_clauses(self) -> List[Dict[str, Any]]:
+        """
+        Get all clauses stored for the document.
+            
+        Returns:
+            List[Dict[str, Any]]: A list of clauses.
+        """
+        return self.clauses
