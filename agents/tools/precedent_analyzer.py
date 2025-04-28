@@ -1,3 +1,4 @@
+import time
 from typing import List, Dict, Any, Optional
 from enum import Enum
 import uuid
@@ -84,6 +85,8 @@ def analyze_precedents_for_compliance(
     if clause_id is None:
         clause_id = str(uuid.uuid4())
 
+    print(f"Analyzing precedent compliance for clause {clause_id}")
+    
     response_parser = ResponseParser()
     confidence_scorer = ConfidenceScorer(min_confidence_threshold=min_confidence)
     prompt_templates = PromptTemplates()
@@ -96,6 +99,8 @@ def analyze_precedents_for_compliance(
         precedent_texts.append(f"Title: {title}\nExcerpt: {content_excerpt}\n---")
     precedents_str = "\n".join(precedent_texts) if precedent_texts else "No specific precedents provided."
 
+    print(f"Analyzing against {len(precedent_texts)} precedents in {jurisdiction} jurisdiction")
+    
     # Format the user prompt
     user_prompt = prompt_templates.format_precedent_prompt(
         clause_text=clause_text,
@@ -105,18 +110,21 @@ def analyze_precedents_for_compliance(
 
     # Generate analysis using LLM
     try:
+        # Adding a delay here to avoid hitting API rate limits
+        time.sleep(5)
+
         response = llm_client.generate(
             system_prompt=PRECEDENT_ANALYSIS_TEMPLATE,
             user_prompt=user_prompt
         )
     except Exception as e:
-        # Handle LLM client errors appropriately
-        print(f"Error generating precedent analysis: {e}") # Replace with proper logging
+        print(f"ERROR: Failed to generate precedent analysis: {e}")
         return []
 
     # Parse the LLM response
     analysis_result = response_parser.parse_precedent_analysis(response) # This returns a dict with 'issues' key
     parsed_issues = analysis_result.get("issues", [])
+    print(f"Identified {len(parsed_issues)} potential precedent issues")
 
     # Score and filter issues
     valid_issues = []
@@ -143,5 +151,6 @@ def analyze_precedents_for_compliance(
             }
             valid_issues.append(formatted_issue)
 
+    print(f"Found {len(valid_issues)} valid precedent issues with confidence >= {min_confidence}")
     return valid_issues
 

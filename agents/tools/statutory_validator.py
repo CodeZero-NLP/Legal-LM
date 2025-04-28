@@ -1,3 +1,4 @@
+import time
 from typing import Dict, List, Any, Optional, Union
 from enum import Enum
 import uuid
@@ -102,22 +103,38 @@ def validate_statutory_compliance(
     if clause_id is None:
         clause_id = str(uuid.uuid4())
     
+    print(f"Validating statutory compliance for clause {clause_id} in {jurisdiction} jurisdiction")
+    
     response_parser = ResponseParser()
     confidence_scorer = ConfidenceScorer(min_confidence_threshold=min_confidence)
     # Assume knowledge_context is a list of statutes if provided
     relevant_statutes = knowledge_context if knowledge_context else []
     
+    if relevant_statutes:
+        print(f"Analyzing against {len(relevant_statutes)} relevant statutes")
+    else:
+        print("No specific statutes provided for analysis")
+    
     # Step 2: Format statutory analysis prompt
     user_prompt = format_statutory_prompt(clause_text, jurisdiction)
     
     # Step 3: Get LLM analysis
-    response = llm_client.generate(
-        system_prompt=STATUTORY_ANALYSIS_TEMPLATE,
-        user_prompt=user_prompt
-    )
+    try:
+        # Adding a delay here to avoid hitting API rate limits
+        time.sleep(5)
+
+        response = llm_client.generate(
+            system_prompt=STATUTORY_ANALYSIS_TEMPLATE,
+            user_prompt=user_prompt
+        )
+    except Exception as e:
+        print(f"ERROR: Failed to generate statutory analysis: {e}")
+        return []
     
     # Step 4: Parse and score the response
     analysis_result = response_parser.parse_statutory_analysis(response)
+    print(f"Identified {len(analysis_result)} potential statutory issues")
+    
     violations = []
     for issue in analysis_result:
         confidence = confidence_scorer.score_issue(issue)  # get confidence using score_issue
@@ -140,4 +157,5 @@ def validate_statutory_compliance(
             )
             violations.append(violation)
     
+    print(f"Found {len(violations)} valid statutory violations with confidence >= {min_confidence}")
     return violations

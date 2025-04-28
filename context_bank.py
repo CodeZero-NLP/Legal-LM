@@ -76,6 +76,15 @@ class ContextBank:
         """
         self.entities.extend(entities)
     
+    def get_entities(self) -> List[Dict[str, Any]]:
+        """
+        Retrieve all named entities extracted from the document.
+        
+        Returns:
+            List[Dict[str, Any]]: A list of extracted entities with their metadata
+        """
+        return self.entities
+    
     def add_clauses(self, clauses: List[Dict[str, Any]]):
         """
         Store clauses extracted from the document.

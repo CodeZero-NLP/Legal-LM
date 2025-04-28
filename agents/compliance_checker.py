@@ -1,5 +1,5 @@
 # agents/compliance_checker.py
-import logging
+import time
 import uuid
 from typing import List, Dict, Any, Optional
 from datetime import datetime
@@ -12,14 +12,6 @@ from agents.tools.statutory_validator import validate_statutory_compliance, Seve
 from agents.tools.precedent_analyzer import analyze_precedents_for_compliance
 from agents.tools.consistency_engine import check_contractual_consistency
 from agents.tools.hypergraph_analyzer import analyze_hypergraph_structure
-
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger("compliance_checker")
-
 
 def check_legal_compliance(
     context_bank: ContextBank,
@@ -44,62 +36,85 @@ def check_legal_compliance(
     Returns:
         List[Dict[str, Any]]: List of non-compliant clauses with detailed analysis
     """
+
+
     # Start time tracking for performance analysis
     start_time = datetime.now()
-    logger.info(f"Starting legal compliance check with model '{model_name}' (use_ollama={use_ollama})")
+    print(f"Starting legal compliance check with model '{model_name}' (use_ollama={use_ollama})")
     
     # Initialize the appropriate LLM client
     llm_client = _initialize_llm_client(use_ollama, model_name)
     if not llm_client:
-        logger.error("Failed to initialize LLM client")
+        print("ERROR: Failed to initialize LLM client")
         return []
     
     # Get document from context bank
     document = context_bank.get_document()
     if not document:
-        logger.error("No document found in context bank")
+        print("ERROR: No document found in context bank")
         return []
     
     document_content = document.get("content", "")
     if not document_content:
-        logger.error("Document has no content")
+        print("ERROR: Document has no content")
         return []
     
     # Get jurisdiction from context bank or estimate using document content
     jurisdiction = context_bank.get_jurisdiction()
+
+    # Adding a delay here to avoid hitting API rate limits
+    time.sleep(5)
+
     if not jurisdiction:
-        logger.warning("No jurisdiction found in context bank, estimating from document content")
+        print("WARNING: No jurisdiction found in context bank, estimating from document content")
         jurisdiction = _estimate_jurisdiction(document_content, llm_client)
-        logger.info(f"Estimated jurisdiction: {jurisdiction}")
+        print(f"Estimated jurisdiction: {jurisdiction}")
         # Store the estimated jurisdiction
         context_bank.add_jurisdiction(jurisdiction)
     
     # Get document type (estimate if necessary)
     document_type = document.get("metadata", {}).get("document_type")
+
+    # Adding a delay here to avoid hitting API rate limits
+    time.sleep(5)
+
     if not document_type:
-        logger.warning("No document type found in metadata, estimating from document content")
+        print("WARNING: No document type found in metadata, estimating from document content")
         document_type = _estimate_document_type(document_content, llm_client)
-        logger.info(f"Estimated document type: {document_type}")
+        print(f"Estimated document type: {document_type}")
     
     # Get clauses from context bank
-    clauses = context_bank.clauses
+    clauses = context_bank.get_clauses()
     if not clauses:
-        logger.error("No clauses found in context bank")
+        print("ERROR: No clauses found in context bank")
         return []
     
     # Get entities from context bank
-    entities = context_bank.entities
-    logger.info(f"Found {len(clauses)} clauses and {len(entities)} entities")
+    entities = context_bank.get_entities()
+    print(f"Found {len(clauses)} clauses and {len(entities)} entities")
     
+    # Adding a delay here to avoid hitting API rate limits
+    time.sleep(5)
+
     # Prepare knowledge context from vector database
     knowledge_context = _prepare_knowledge_context(knowledge_from_vector_db, llm_client)
-    logger.info(f"Prepared knowledge context with {len(knowledge_context['statutes'])} statutes and {len(knowledge_context['precedents'])} precedents")
+    print(f"Prepared knowledge context with {len(knowledge_context['statutes'])} statutes and {len(knowledge_context['precedents'])} precedents")
     
     # Process each clause for compliance issues
     non_compliant_clauses = []
     for i, clause in enumerate(clauses):
-        logger.info(f"Analyzing clause {i+1}/{len(clauses)} (ID: {clause.get('id', 'unknown')})")
+        print(f"Analyzing clause {i+1}/{len(clauses)} (ID: {clause.get('id', 'unknown')})")
         
+        # Updated to use 'Text' instead of 'text'
+        print(f"Clause Text: {clause.get('Text', 'No text available')}")
+
+        # Updated to use 'Category' instead of 'category'
+        print(f"Clause Category: {clause.get('Category', 'No category available')}")
+
+
+        # Adding a delay here to avoid hitting API rate limits
+        time.sleep(5)
+
         clause_analysis = _analyze_clause_compliance(
             clause=clause,
             context_bank=context_bank,
@@ -115,7 +130,7 @@ def check_legal_compliance(
         # If there are any issues, add this clause to the non-compliant list
         if clause_analysis["has_issues"]:
             non_compliant_clauses.append(clause_analysis["result"])
-            logger.info(f"Found {clause_analysis['issue_count']} compliance issues in clause")
+            print(f"Found {clause_analysis['issue_count']} compliance issues in clause")
     
     # Store document-level results in context bank
     _store_document_analysis(
@@ -129,7 +144,7 @@ def check_legal_compliance(
     # Log performance metrics
     end_time = datetime.now()
     duration = (end_time - start_time).total_seconds()
-    logger.info(f"Completed compliance check in {duration:.2f} seconds. Found {len(non_compliant_clauses)} non-compliant clauses")
+    print(f"Completed compliance check in {duration:.2f} seconds. Found {len(non_compliant_clauses)} non-compliant clauses")
     
     return non_compliant_clauses
 
@@ -138,13 +153,13 @@ def _initialize_llm_client(use_ollama: bool, model_name: str) -> Any:
     """Initialize and return the appropriate LLM client based on settings."""
     try:
         if use_ollama:
-            logger.info(f"Initializing Ollama client with model {model_name}")
+            print(f"Initializing Ollama client with model {model_name}")
             return OllamaClient(model_name)
         else:
-            logger.info(f"Initializing API client with model {model_name}")
+            print(f"Initializing API client with model {model_name}")
             return APIClient(model_name)
     except Exception as e:
-        logger.error(f"Failed to initialize LLM client: {str(e)}")
+        print(f"ERROR: Failed to initialize LLM client: {str(e)}")
         return None
 
 
@@ -166,7 +181,7 @@ def _estimate_jurisdiction(document_content: str, llm_client: Any) -> str:
         jurisdiction = response.strip().split('\n')[0].strip()
         return jurisdiction or "US"  # Default to US if empty
     except Exception as e:
-        logger.error(f"Error estimating jurisdiction: {str(e)}")
+        print(f"ERROR: Error estimating jurisdiction: {str(e)}")
         return "US"  # Default to US on error
 
 
@@ -188,7 +203,7 @@ def _estimate_document_type(document_content: str, llm_client: Any) -> str:
         document_type = response.strip().split('\n')[0].strip()
         return document_type or "contract"  # Default to contract if empty
     except Exception as e:
-        logger.error(f"Error estimating document type: {str(e)}")
+        print(f"ERROR: Error estimating document type: {str(e)}")
         return "contract"  # Default to contract on error
 
 
@@ -209,10 +224,10 @@ def _prepare_knowledge_context(knowledge_from_vector_db: List[Dict[str, Any]], l
     }
     
     if not knowledge_from_vector_db:
-        logger.warning("No knowledge data from vector database")
+        print("WARNING: No knowledge data from vector database")
         return knowledge_context
     
-    logger.info(f"Processing {len(knowledge_from_vector_db)} knowledge items from vector database")
+    print(f"Processing {len(knowledge_from_vector_db)} knowledge items from vector database")
     
     # Process each knowledge item
     for item in knowledge_from_vector_db:
@@ -220,7 +235,7 @@ def _prepare_knowledge_context(knowledge_from_vector_db: List[Dict[str, Any]], l
         title = item.get("title", "")
         
         if not content and not title:
-            logger.warning("Skipping empty knowledge item")
+            print("WARNING: Skipping empty knowledge item")
             continue
         
         # Classify the item as statute or precedent
@@ -241,7 +256,7 @@ def _prepare_knowledge_context(knowledge_from_vector_db: List[Dict[str, Any]], l
                 "score": item.get("score", 0.0)
             })
     
-    logger.info(f"Classified knowledge: {len(knowledge_context['statutes'])} statutes, {len(knowledge_context['precedents'])} precedents")
+    print(f"Classified knowledge: {len(knowledge_context['statutes'])} statutes, {len(knowledge_context['precedents'])} precedents")
     return knowledge_context
 
 
@@ -276,7 +291,7 @@ def _classify_knowledge_item(title: str, content: str, llm_client: Any) -> str:
         else:
             return "precedent"
     except Exception as e:
-        logger.error(f"Error classifying knowledge item: {str(e)}")
+        print(f"ERROR: Error classifying knowledge item: {str(e)}")
         # Default based on title keywords if LLM fails
         statute_keywords = ["code", "statute", "act", "regulation", "rule", "law"]
         if any(keyword in title.lower() for keyword in statute_keywords):
@@ -313,23 +328,26 @@ def _analyze_clause_compliance(
         Dict: Comprehensive analysis results
     """
     clause_id = clause.get("id", str(uuid.uuid4()))
-    clause_text = clause.get("text", "")
+    clause_text = clause.get("Text", "")
     
     if not clause_text:
-        logger.warning(f"Empty text for clause ID {clause_id}")
+        print(f"WARNING: Empty text for clause ID {clause_id}")
         return {
             "has_issues": False,
             "issue_count": 0,
             "result": None
         }
     
-    logger.info(f"Analyzing compliance for clause ID {clause_id}")
+    print(f"Analyzing compliance for clause ID {clause_id}")
     
     # 1. Check statutory compliance - only if statutes are available
     statutory_violations = []
     if knowledge_context["statutes"]:
-        logger.info(f"Checking statutory compliance against {len(knowledge_context['statutes'])} statutes")
+        print(f"Checking statutory compliance against {len(knowledge_context['statutes'])} statutes")
         try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
             statutory_violations = validate_statutory_compliance(
                 clause_text=clause_text,
                 llm_client=llm_client,
@@ -338,15 +356,18 @@ def _analyze_clause_compliance(
                 knowledge_context=knowledge_context["statutes"],
                 min_confidence=min_confidence
             )
-            logger.info(f"Found {len(statutory_violations)} statutory violations")
+            print(f"Found {len(statutory_violations)} statutory violations")
         except Exception as e:
-            logger.error(f"Error in statutory validation: {str(e)}")
+            print(f"ERROR: Error in statutory validation: {str(e)}")
     
     # 2. Check precedent compliance - only if precedents are available
     precedent_issues = []
     if knowledge_context["precedents"]:
-        logger.info(f"Checking precedent compliance against {len(knowledge_context['precedents'])} precedents")
+        print(f"Checking precedent compliance against {len(knowledge_context['precedents'])} precedents")
         try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
             # Call the implemented function
             precedent_issues = analyze_precedents_for_compliance(
                 clause_text=clause_text,
@@ -357,9 +378,9 @@ def _analyze_clause_compliance(
                 knowledge_context=knowledge_context["precedents"], # Pass only precedents
                 min_confidence=min_confidence
             )
-            logger.info(f"Found {len(precedent_issues)} precedent issues")
+            print(f"Found {len(precedent_issues)} precedent issues")
         except Exception as e:
-            logger.error(f"Error in precedent analysis: {str(e)}")
+            print(f"ERROR: Error in precedent analysis: {str(e)}")
     
     # 3. Check contractual consistency
     consistency_issues = []
@@ -376,7 +397,7 @@ def _analyze_clause_compliance(
                     "text": other_clause.get("text", "")
                 })
         
-        logger.info(f"Checking consistency against {len(consistency_clauses)-1} other clauses")
+        print(f"Checking consistency against {len(consistency_clauses)-1} other clauses")
         
         # Document context for consistency check
         document_context = {
@@ -385,6 +406,9 @@ def _analyze_clause_compliance(
             "entities": entities
         }
         
+        # Adding a delay here to avoid hitting API rate limits
+        time.sleep(5)
+
         # Perform consistency check
         consistency_analysis = check_contractual_consistency(
             clauses=consistency_clauses,
@@ -410,15 +434,15 @@ def _analyze_clause_compliance(
                     "type": "consistency"
                 })
         
-        logger.info(f"Found {len(consistency_issues)} consistency issues")
+        print(f"Found {len(consistency_issues)} consistency issues")
     except Exception as e:
-        logger.error(f"Error in consistency analysis: {str(e)}")
+        print(f"ERROR: Error in consistency analysis: {str(e)}")
     
     # 4. Optional: Perform hypergraph analysis if there are enough clauses
     hypergraph_analysis = None
     if len(consistency_clauses) >= 3:
         try:
-            logger.info("Performing hypergraph analysis")
+            print("Performing hypergraph analysis")
             hypergraph_analysis = analyze_hypergraph_structure(
                 clauses=consistency_clauses,
                 llm_client=llm_client,
@@ -427,9 +451,9 @@ def _analyze_clause_compliance(
                 analyze_clusters=True,
                 node_to_analyze=clause_id
             )
-            logger.info("Completed hypergraph analysis")
+            print("Completed hypergraph analysis")
         except Exception as e:
-            logger.error(f"Error in hypergraph analysis: {str(e)}")
+            print(f"ERROR: Error in hypergraph analysis: {str(e)}")
     
     # Combine all issues for this clause
     clause_issues = []
@@ -488,9 +512,9 @@ def _analyze_clause_compliance(
         
         try:
             context_bank.add_clause_compliance_result(clause_id=clause_id, analysis=clause_analysis)
-            logger.info(f"Stored compliance analysis for clause {clause_id} in context bank")
+            print(f"Stored compliance analysis for clause {clause_id} in context bank")
         except Exception as e:
-            logger.error(f"Error storing clause analysis in context bank: {str(e)}")
+            print(f"ERROR: Error storing clause analysis in context bank: {str(e)}")
 
         return {
             "has_issues": True,
@@ -537,6 +561,6 @@ def _store_document_analysis(
     
     try:
         context_bank.add_document_analysis(analysis=document_analysis)
-        logger.info(f"Stored document analysis in context bank: {len(non_compliant_clauses)} non-compliant clauses with {total_issues} issues")
+        print(f"Stored document analysis in context bank: {len(non_compliant_clauses)} non-compliant clauses with {total_issues} issues")
     except Exception as e:
-        logger.error(f"Error storing document analysis in context bank: {str(e)}")
+        print(f"ERROR: Error storing document analysis in context bank: {str(e)}")

@@ -1,3 +1,4 @@
+import time
 from typing import Dict, List, Any, Optional, Tuple
 import uuid
 from enum import Enum
@@ -8,7 +9,6 @@ from agents.utils.prompt_templates import PromptTemplates
 from agents.utils.response_parser import ResponseParser
 from agents.utils.confidence_scorer import ConfidenceScorer
 from agents.utils.dependency_analyzer import DependencyAnalyzer
-from agents.utils.hypergraph import LegalHypergraph
 
 
 @dataclass
@@ -84,6 +84,8 @@ def check_contractual_consistency(
     # Generate a unique ID for this analysis
     analysis_id = str(uuid.uuid4())
     
+    print(f"Starting contractual consistency check for {len(clauses)} clauses (min_confidence={min_confidence})")
+    
     # Helper function: Extract implications from text
     def extract_implications(text: str) -> List[str]:
         """
@@ -120,16 +122,22 @@ def check_contractual_consistency(
             If no clear implications are present, respond with "NO_IMPLICATIONS".
             """
             
-            response = llm_client.generate(
-                system_prompt="You are a legal analyst specializing in identifying implications.",
-                user_prompt=prompt
-            )
-            
-            if "NO_IMPLICATIONS" not in response:
-                for line in response.split("\n"):
-                    line = line.strip()
-                    if line.startswith("- "):
-                        implications.append(line[2:])
+            try:
+                # Adding a delay here to avoid hitting API rate limits
+                time.sleep(5)
+                
+                response = llm_client.generate(
+                    system_prompt="You are a legal analyst specializing in identifying implications.",
+                    user_prompt=prompt
+                )
+                
+                if "NO_IMPLICATIONS" not in response:
+                    for line in response.split("\n"):
+                        line = line.strip()
+                        if line.startswith("- "):
+                            implications.append(line[2:])
+            except Exception as e:
+                print(f"ERROR: Failed to extract implications: {e}")
         
         return implications
     
@@ -242,37 +250,44 @@ def check_contractual_consistency(
         If no terms are defined, respond with "NO_DEFINED_TERMS".
         """
         
-        response = llm_client.generate(
-            system_prompt="You are a legal document analyzer specializing in extracting defined terms.",
-            user_prompt=prompt
-        )
-        
-        # Parse the response
-        definitions = {}
-        
-        if "NO_DEFINED_TERMS" in response:
-            return definitions
-        
-        term_blocks = response.split("[TERM]")
-        for block in term_blocks:
-            if "[/TERM]" not in block:
-                continue
+        try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
+            response = llm_client.generate(
+                system_prompt="You are a legal document analyzer specializing in extracting defined terms.",
+                user_prompt=prompt
+            )
+            
+            # Parse the response
+            definitions = {}
+            
+            if "NO_DEFINED_TERMS" in response:
+                return definitions
+            
+            term_blocks = response.split("[TERM]")
+            for block in term_blocks:
+                if "[/TERM]" not in block:
+                    continue
+                    
+                content = block.split("[/TERM]")[0].strip()
+                term = ""
+                definition = ""
                 
-            content = block.split("[/TERM]")[0].strip()
-            term = ""
-            definition = ""
+                for line in content.split("\n"):
+                    line = line.strip()
+                    if line.startswith("Term:"):
+                        term = line[5:].strip()
+                    elif line.startswith("Definition:"):
+                        definition = line[11:].strip()
+                
+                if term and definition:
+                    definitions[term] = definition
             
-            for line in content.split("\n"):
-                line = line.strip()
-                if line.startswith("Term:"):
-                    term = line[5:].strip()
-                elif line.startswith("Definition:"):
-                    definition = line[11:].strip()
-            
-            if term and definition:
-                definitions[term] = definition
-        
-        return definitions
+            return definitions
+        except Exception as e:
+            print(f"ERROR: Failed to extract definitions: {e}")
+            return {}
     
     # Helper function: Check if definitions are consistent
     def are_definitions_consistent(definitions: List[Dict[str, Any]]) -> bool:
@@ -302,12 +317,19 @@ def check_contractual_consistency(
         Respond with "INCONSISTENT" if the definitions contradict or are incompatible with each other.
         """
         
-        response = llm_client.generate(
-            system_prompt="You are a legal document analyzer specializing in term definitions.",
-            user_prompt=prompt
-        )
-        
-        return "CONSISTENT" in response.upper()
+        try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
+            response = llm_client.generate(
+                system_prompt="You are a legal document analyzer specializing in term definitions.",
+                user_prompt=prompt
+            )
+            
+            return "CONSISTENT" in response.upper()
+        except Exception as e:
+            print(f"ERROR: Failed to check definition consistency: {e}")
+            return True  # Default to consistent if check fails
     
     # Helper function: Validate term definitions
     def validate_definitions(clauses: List[Dict[str, Any]]) -> List[DefinitionIssue]:
@@ -320,6 +342,8 @@ def check_contractual_consistency(
         Returns:
             List[DefinitionIssue]: List of definition issues
         """
+        print("Validating term definitions across document")
+        
         # Extract defined terms and their usage
         defined_terms = {}
         term_usage = {}
@@ -339,6 +363,8 @@ def check_contractual_consistency(
                     "clause_id": clause_id,
                     "definition": definitions[term]
                 })
+        
+        print(f"Found {len(defined_terms)} defined terms across the document")
         
         # Second pass: collect term usage
         for clause in clauses:
@@ -367,11 +393,9 @@ def check_contractual_consistency(
                         affected_clauses=[d["clause_id"] for d in definitions]
                     )
                     definition_issues.append(issue)
+                    print(f"Found inconsistent definitions for term '{term}'")
         
-        # Check for undefined but used terms
-        # This would require a more sophisticated analysis of legal terminology
-        # For now, we'll focus on inconsistent definitions
-        
+        print(f"Identified {len(definition_issues)} term definition issues")
         return definition_issues
     
     # Helper function: Check consistency between clause pairs
@@ -415,46 +439,56 @@ def check_contractual_consistency(
         """
         
         # Get consistency analysis from LLM
-        response = llm_client.generate(
-            system_prompt=prompt_templates.consistency_check_template,
-            user_prompt=user_prompt
-        )
-        
-        # Parse the response to extract issues
-        analysis = response_parser.parse_consistency_check(response)
-        scored_analysis = confidence_scorer.score_analysis(analysis)
-        
-        # Convert issues to Inconsistency objects
-        inconsistencies = []
-        
-        for issue in confidence_scorer.get_high_confidence_issues(scored_analysis):
-            # Generate a unique ID for this inconsistency
-            inconsistency_id = str(uuid.uuid4())
-            
-            # Determine severity
-            severity = issue.get("severity", "MEDIUM")
-            
-            # Extract implications if available
-            implications = []
-            reasoning = issue.get("reasoning", "")
-            if reasoning:
-                implications = extract_implications(reasoning)
-            
-            # Create Inconsistency object
-            inconsistency = Inconsistency(
-                id=inconsistency_id,
-                source_clause_id=source_id,
-                target_clause_id=target_id,
-                description=issue.get("description", ""),
-                severity=severity,
-                reasoning=reasoning,
-                implications=implications,
-                confidence=issue.get("confidence", 0.0)
+        try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
+            response = llm_client.generate(
+                system_prompt=prompt_templates.consistency_check_template,
+                user_prompt=user_prompt
             )
             
-            inconsistencies.append(inconsistency)
-        
-        return inconsistencies
+            # Parse the response to extract issues
+            analysis = response_parser.parse_consistency_check(response)
+            scored_analysis = confidence_scorer.score_analysis(analysis)
+            
+            # Convert issues to Inconsistency objects
+            inconsistencies = []
+            
+            for issue in confidence_scorer.get_high_confidence_issues(scored_analysis):
+                # Generate a unique ID for this inconsistency
+                inconsistency_id = str(uuid.uuid4())
+                
+                # Determine severity
+                severity = issue.get("severity", "MEDIUM")
+                
+                # Extract implications if available
+                implications = []
+                reasoning = issue.get("reasoning", "")
+                if reasoning:
+                    implications = extract_implications(reasoning)
+                
+                # Create Inconsistency object
+                inconsistency = Inconsistency(
+                    id=inconsistency_id,
+                    source_clause_id=source_id,
+                    target_clause_id=target_id,
+                    description=issue.get("description", ""),
+                    severity=severity,
+                    reasoning=reasoning,
+                    implications=implications,
+                    confidence=issue.get("confidence", 0.0)
+                )
+                
+                inconsistencies.append(inconsistency)
+            
+            if inconsistencies:
+                print(f"Found {len(inconsistencies)} inconsistencies between clauses {source_id} and {target_id}")
+            
+            return inconsistencies
+        except Exception as e:
+            print(f"ERROR: Failed to check clause pair consistency: {e}")
+            return []
     
     # Helper function: Analyze a cycle of clauses
     def analyze_cycle_inconsistency(cycle_clauses: List[Dict[str, Any]]) -> Optional[Inconsistency]:
@@ -467,6 +501,8 @@ def check_contractual_consistency(
         Returns:
             Optional[Inconsistency]: Inconsistency if found, None otherwise
         """
+        print(f"Analyzing cycle of {len(cycle_clauses)} clauses for circular dependencies")
+        
         # Format the clauses for the prompt
         clauses_text = ""
         clause_ids = []
@@ -487,31 +523,43 @@ def check_contractual_consistency(
         """
         
         # Get cycle analysis from LLM
-        response = llm_client.generate(
-            system_prompt="You are a legal document analyzer specializing in detecting circular dependencies and logical inconsistencies.",
-            user_prompt=user_prompt
-        )
-        
-        # Check if a significant issue was identified
-        if "NO_ISSUES" in response or len(response.strip()) < 50:
+        try:
+            # Adding a delay here to avoid hitting API rate limits
+            time.sleep(5)
+
+            response = llm_client.generate(
+                system_prompt="You are a legal document analyzer specializing in detecting circular dependencies and logical inconsistencies.",
+                user_prompt=user_prompt
+            )
+            
+            # Check if a significant issue was identified
+            if "NO_ISSUES" in response or len(response.strip()) < 50:
+                print("No significant issues found in the cycle")
+                return None
+            
+            # Create an Inconsistency object for the cycle
+            inconsistency = Inconsistency(
+                id=str(uuid.uuid4()),
+                source_clause_id=clause_ids[0] if clause_ids else "unknown",
+                target_clause_id=clause_ids[-1] if len(clause_ids) > 1 else "unknown",
+                description=f"Circular dependency between {len(cycle_clauses)} clauses",
+                severity="HIGH",  # Cycles are typically high severity
+                reasoning=response,
+                implications=extract_implications(response),
+                confidence=0.9  # High confidence for structural issues
+            )
+            
+            print(f"Found circular dependency issue with severity HIGH")
+            return inconsistency
+        except Exception as e:
+            print(f"ERROR: Failed to analyze cycle inconsistency: {e}")
             return None
-        
-        # Create an Inconsistency object for the cycle
-        return Inconsistency(
-            id=str(uuid.uuid4()),
-            source_clause_id=clause_ids[0] if clause_ids else "unknown",
-            target_clause_id=clause_ids[-1] if len(clause_ids) > 1 else "unknown",
-            description=f"Circular dependency between {len(cycle_clauses)} clauses",
-            severity="HIGH",  # Cycles are typically high severity
-            reasoning=response,
-            implications=extract_implications(response),
-            confidence=0.9  # High confidence for structural issues
-        )
     
     # MAIN FUNCTION EXECUTION
     
     # Validate input clauses
     if not clauses or len(clauses) < 2:
+        print("WARNING: Not enough clauses for consistency analysis")
         return {
             "analysis_id": analysis_id,
             "inconsistencies": [],
@@ -523,10 +571,16 @@ def check_contractual_consistency(
     
     # Build dependency graph if using hypergraph analysis
     if use_hypergraph:
+        print("Building dependency graph for hypergraph analysis")
         dependency_graph = dependency_analyzer.build_dependency_graph(clauses)
         cycles = dependency_graph.detect_cycles()
+        if cycles:
+            print(f"Detected {len(cycles)} cycles in the dependency graph")
         long_range_deps = dependency_analyzer.find_long_range_dependencies(dependency_graph)
+        if long_range_deps:
+            print(f"Found {len(long_range_deps)} long-range dependencies")
     else:
+        print("Skipping hypergraph analysis")
         cycles = []
         long_range_deps = []
     
@@ -536,6 +590,7 @@ def check_contractual_consistency(
     # Check for pairwise inconsistencies
     inconsistencies = []
     
+    print("Checking pairwise consistency between clauses")
     # For each clause, check against all other clauses
     for i, source_clause in enumerate(clauses):
         for j, target_clause in enumerate(clauses):
@@ -553,12 +608,14 @@ def check_contractual_consistency(
             inconsistencies.extend(pair_inconsistencies)
     
     # Add cycle-based inconsistencies
-    for cycle in cycles:
-        cycle_clauses = [clauses[int(node_id)] for node_id in cycle if node_id.isdigit() and int(node_id) < len(clauses)]
-        if cycle_clauses:
-            cycle_inconsistency = analyze_cycle_inconsistency(cycle_clauses)
-            if cycle_inconsistency:
-                inconsistencies.append(cycle_inconsistency)
+    if cycles:
+        print("Analyzing detected cycles for inconsistencies")
+        for cycle in cycles:
+            cycle_clauses = [clauses[int(node_id)] for node_id in cycle if node_id.isdigit() and int(node_id) < len(clauses)]
+            if cycle_clauses:
+                cycle_inconsistency = analyze_cycle_inconsistency(cycle_clauses)
+                if cycle_inconsistency:
+                    inconsistencies.append(cycle_inconsistency)
     
     # Structure the final results
     results = {
@@ -572,128 +629,6 @@ def check_contractual_consistency(
         "long_range_dependencies": long_range_deps if use_hypergraph else []
     }
     
+    print(f"Completed consistency analysis: {len(inconsistencies)} inconsistencies, {len(definition_issues)} definition issues")
     return results
 
-
-class ContractualConsistencyEngine:
-    """
-    Legacy class maintained for backward compatibility.
-    Engine for checking internal consistency within legal documents.
-    Identifies contradictions, definition issues, and logical inconsistencies.
-    Now uses the standalone check_contractual_consistency function.
-    """
-    
-    def __init__(self, 
-                 llm_client: Any, 
-                 min_confidence: float = 0.75,
-                 use_hypergraph: bool = True):
-        """
-        Initialize the ContractualConsistencyEngine.
-        
-        Args:
-            llm_client: Client for LLM interactions
-            min_confidence: Minimum confidence threshold for valid issues
-            use_hypergraph: Whether to use hypergraph analysis for complex relationships
-        """
-        self.llm_client = llm_client
-        self.prompt_templates = PromptTemplates()
-        self.response_parser = ResponseParser()
-        self.confidence_scorer = ConfidenceScorer(min_confidence_threshold=min_confidence)
-        self.min_confidence = min_confidence
-        
-        # Initialize dependency analyzer for cross-clause relationships
-        self.dependency_analyzer = DependencyAnalyzer()
-        
-        # Flag for using hypergraph analysis
-        self.use_hypergraph = use_hypergraph
-    
-    def check_consistency(self, 
-                         clauses: List[Dict[str, Any]],
-                         document_context: Dict[str, Any] = None) -> Dict[str, Any]:
-        """
-        Check consistency across all clauses in a document.
-        This method now uses the standalone check_contractual_consistency function.
-        
-        Args:
-            clauses: List of clause dictionaries with 'id' and 'text' fields
-            document_context: Optional additional context about the document
-            
-        Returns:
-            Dict: Consistency analysis results
-        """
-        return check_contractual_consistency(
-            clauses=clauses,
-            llm_client=self.llm_client,
-            document_context=document_context,
-            min_confidence=self.min_confidence,
-            use_hypergraph=self.use_hypergraph
-        )
-    
-    # Legacy methods for backward compatibility
-    
-    def _check_clause_pair_consistency(self, 
-                                      source_clause: Dict[str, Any], 
-                                      target_clause: Dict[str, Any],
-                                      document_context: Dict[str, Any] = None) -> List[Inconsistency]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        return self.check_consistency({
-            "clauses": [source_clause, target_clause],
-            "document_context": document_context
-        }).get("inconsistencies", [])
-    
-    def _analyze_cycle_inconsistency(self, cycle_clauses: List[Dict[str, Any]]) -> Optional[Inconsistency]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
-    
-    def _validate_definitions(self, clauses: List[Dict[str, Any]]) -> List[DefinitionIssue]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        result = self.check_consistency({
-            "clauses": clauses
-        })
-        return result.get("definition_issues", [])
-    
-    def _extract_definitions(self, text: str) -> Dict[str, str]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
-    
-    def _are_definitions_consistent(self, definitions: List[Dict[str, Any]]) -> bool:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
-    
-    def _extract_implications(self, text: str) -> List[str]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
-    
-    def analyze_dependencies(self, 
-                            clause: Dict[str, Any], 
-                            all_clauses: List[Dict[str, Any]]) -> List[Dependency]:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
-    
-    def _reference_matches_clause(self, reference: Dict[str, Any], clause: Dict[str, Any]) -> bool:
-        """
-        Legacy method that delegates to the function in check_contractual_consistency.
-        """
-        # Function signature maintained for backward compatibility
-        pass
