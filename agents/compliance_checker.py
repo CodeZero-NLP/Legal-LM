@@ -61,6 +61,7 @@ def check_legal_compliance(
     
     # Get jurisdiction from context bank or estimate using document content
     jurisdiction = context_bank.get_jurisdiction()
+    print(f"Jurisdiction from context bank: {jurisdiction}")
 
     # Adding a delay here to avoid hitting API rate limits
     time.sleep(5)
@@ -73,7 +74,13 @@ def check_legal_compliance(
         context_bank.add_jurisdiction(jurisdiction)
     
     # Get document type (estimate if necessary)
-    document_type = document.get("metadata", {}).get("document_type")
+    # document_type = document.get("metadata", {}).get("document_type")
+
+    doc_meta_from_bank = context_bank.get_document().get("metadata", {})
+    # Extract the document_type from the retrieved metadata
+    # Provide a default value if the key is missing
+    document_type = doc_meta_from_bank.get("document_type", "Unknown Document Type") 
+    print(f"Document type from metadata: {document_type}")
 
     # Adding a delay here to avoid hitting API rate limits
     time.sleep(5)
@@ -285,6 +292,9 @@ def _classify_knowledge_item(title: str, content: str, llm_client: Any) -> str:
     """
     
     try:
+        # Adding a delay here to avoid hitting API rate limits
+        time.sleep(5)
+
         response = llm_client.query(prompt).strip().lower()
         if "statute" in response or "regulation" in response or "code" in response:
             return "statute"

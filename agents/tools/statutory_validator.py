@@ -123,9 +123,9 @@ def validate_statutory_compliance(
         # Adding a delay here to avoid hitting API rate limits
         time.sleep(5)
 
-        response = llm_client.generate(
+        response = llm_client.query(
             system_prompt=STATUTORY_ANALYSIS_TEMPLATE,
-            user_prompt=user_prompt
+            prompt=user_prompt
         )
     except Exception as e:
         print(f"ERROR: Failed to generate statutory analysis: {e}")

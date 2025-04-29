@@ -126,9 +126,9 @@ def check_contractual_consistency(
                 # Adding a delay here to avoid hitting API rate limits
                 time.sleep(5)
                 
-                response = llm_client.generate(
+                response = llm_client.query(
                     system_prompt="You are a legal analyst specializing in identifying implications.",
-                    user_prompt=prompt
+                    prompt=prompt
                 )
                 
                 if "NO_IMPLICATIONS" not in response:
@@ -254,9 +254,9 @@ def check_contractual_consistency(
             # Adding a delay here to avoid hitting API rate limits
             time.sleep(5)
 
-            response = llm_client.generate(
+            response = llm_client.query(
                 system_prompt="You are a legal document analyzer specializing in extracting defined terms.",
-                user_prompt=prompt
+                prompt=prompt
             )
             
             # Parse the response
@@ -321,9 +321,9 @@ def check_contractual_consistency(
             # Adding a delay here to avoid hitting API rate limits
             time.sleep(5)
 
-            response = llm_client.generate(
+            response = llm_client.query(
                 system_prompt="You are a legal document analyzer specializing in term definitions.",
-                user_prompt=prompt
+                prompt=prompt
             )
             
             return "CONSISTENT" in response.upper()
@@ -443,9 +443,9 @@ def check_contractual_consistency(
             # Adding a delay here to avoid hitting API rate limits
             time.sleep(5)
 
-            response = llm_client.generate(
+            response = llm_client.query(
                 system_prompt=prompt_templates.consistency_check_template,
-                user_prompt=user_prompt
+                prompt=user_prompt
             )
             
             # Parse the response to extract issues
@@ -527,9 +527,9 @@ def check_contractual_consistency(
             # Adding a delay here to avoid hitting API rate limits
             time.sleep(5)
 
-            response = llm_client.generate(
+            response = llm_client.query(
                 system_prompt="You are a legal document analyzer specializing in detecting circular dependencies and logical inconsistencies.",
-                user_prompt=user_prompt
+                prompt=user_prompt
             )
             
             # Check if a significant issue was identified

@@ -354,9 +354,9 @@ def analyze_hypergraph_structure(
         """
         
         # Get analysis from LLM
-        response = llm_client.generate(
+        response = llm_client.query(
             system_prompt="You are a legal document analyzer specializing in identifying circular dependencies and their implications.",
-            user_prompt=prompt
+            prompt=prompt
         )
         
         # Parse the response
