@@ -2,15 +2,12 @@ import requests
 import uuid
 from typing import List, Dict
 from cleantext import clean
-
 from bs4 import BeautifulSoup
-
 from duckduckgo_search import DDGS
-
 from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams
-
 from langchain_ollama import OllamaEmbeddings
+import fitz # pip install PyMuPDF
 
 class DuckDuckGoSearcher:
     def __init__(self):
@@ -37,12 +34,35 @@ class WebContentRetriever:
             )
 
     def _scrape_content(self, url: str) -> str:
-        response = requests.get(url)
-        soup = BeautifulSoup(response.content, 'html.parser')
+        if url.lower().endswith(".pdf"):
+            return self._extract_pdf_text(url)
+        else:
+            return self._extract_html_text(url)
 
+    def _extract_html_text(self, url: str) -> str:
+        response = requests.get(url, timeout=10)
+        soup = BeautifulSoup(response.content, 'html.parser')
         paragraphs = soup.find_all('p')
         content = ' '.join([p.get_text() for p in paragraphs])
-        content = ' '.join(content.split())
+        return self._clean_text(content)
+
+    def _extract_pdf_text(self, url: str) -> str:
+        response = requests.get(url, timeout=15)
+        filename = f"./tmp/{uuid.uuid4()}.pdf"
+        with open(filename, "wb") as f:
+            f.write(response.content)
+        try:
+            doc = fitz.open(filename)
+            text = ""
+            for page in doc:
+                text += page.get_text()
+            return self._clean_text(text)
+        except Exception as e:
+            print(f"Error parsing PDF {url}: {e}")
+            return ""
+
+    def _clean_text(self, text: str) -> str:
+        content = ' '.join(text.split())
         cleaned_content = clean(
             content,
             fix_unicode=True,
@@ -65,12 +85,10 @@ class WebContentRetriever:
             replace_with_currency_symbol="<CUR>",
             lang="en"
         )
-
         return cleaned_content
 
     def _get_embeddings(self, text: str) -> List[float]:
-        embeddings = self.embeddings.embed_query(text=text)
-        return embeddings
+        return self.embeddings.embed_query(text=text)
 
     def store_content_in_qdrant(self, query: str):
         search_results = self.searcher.search(query, num_results=self.num_results)
@@ -78,14 +96,14 @@ class WebContentRetriever:
         for result in search_results:
             url = result["url"]
             title = result["title"]
-            # snippet = result["snippet"]
-            
             print(f"Scraping content from: {url}")
 
             content = self._scrape_content(url)
+            if not content.strip():
+                print(f"Skipping empty content for: {url}")
+                continue
 
             embeddings = self._get_embeddings(content)
-
             point_id = str(uuid.uuid5(uuid.NAMESPACE_URL, url))
             
             self.qdrant_client.upsert(
@@ -96,7 +114,6 @@ class WebContentRetriever:
                         "vector": embeddings,
                         "payload": {
                             "title": title,
-                            # "snippet": snippet,
                             "content": content,
                             "url": url
                         }
@@ -107,14 +124,12 @@ class WebContentRetriever:
 
     def search_in_qdrant(self, query: str) -> List[Dict]:
         query_embeddings = self._get_embeddings(query)
-        
         search_results = self.qdrant_client.query_points(
             collection_name=self.collection_name,
             query=query_embeddings,
             with_payload=True,
             limit=3
         ).points
-        # print(search_results)
 
         return [
             {
@@ -124,6 +139,7 @@ class WebContentRetriever:
             }
             for result in search_results
         ]
+
 
 ###################################################################
 #   USAGE GUIDE
