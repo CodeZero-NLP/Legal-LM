@@ -1,0 +1,28 @@
+[
+    {
+        "file_name": "2ThemartComInc_19990826_10-12G_EX-10.10_6700288_EX-10.10_Co-BrandingAgreement_AgencyAgreement.txt",
+        "perturbation": [
+            {
+                "type": "Ambiguities - In Text Contradiction",
+                "original_text": "(c) \"CUSTOMERS\" means all users who access Co-Branded Site.",
+                "changed_text": "(c) \"CUSTOMERS\" means all users who access Co-Branded Site and complete at least one transaction per month.",
+                "explanation": "The original definition of 'Customers' is broad, encompassing all users of the Co-Branded Site. The modified definition adds a requirement of completing at least one transaction per month, creating a narrower and conflicting definition. This ambiguity could lead to disputes regarding who qualifies as a 'Customer' for purposes of marketing reports, promotional discounts, or other benefits.",
+                "location": "1(c)"
+            },
+            {
+                "type": "Ambiguities - In Text Contradiction",
+                "original_text": "8.1 TERM.  The term of this Agreement shall continue for one (1) year following the Launch Date, unless earlier terminated as provided herein. This Agreement may be renewed for any number of successive one (1) year terms by mutual written agreement of the parties prior to the conclusion of the term of this Agreement.  A party wishing to renew this Agreement shall give the other party notice thereof no less than thirty (30) days before the expiration of the term then in effect.  In the event that either party does not give such notice, the term of this Agreement shall be automatically renewed for another one (1) year.",
+                "changed_text": "8.1 TERM.  The term of this Agreement shall continue for one (1) year following the Launch Date, unless earlier terminated as provided herein. This Agreement may be renewed for any number of successive one (1) year terms by mutual written agreement of the parties prior to the conclusion of the term of this Agreement.  A party wishing to renew this Agreement shall give the other party notice thereof no less than thirty (30) days before the expiration of the term then in effect.  A party wishing to renew this Agreement shall give the other party notice thereof no less than thirty (30) days before the expiration of the term then in effect. In the event that neither party expresses a desire to renew the agreement in writing, the term of this Agreement shall expire automatically.",
+                "explanation": "The original text states that the agreement is automatically renewed for one year terms unless notice is given to not renew. The modified text says that the agreement term expires if neither party expresses a desire to renew in writing. These two conditions are in direct conflict, making the continuation of the contract unclear after the initial term.",
+                "location": "8.1"
+            },
+            {
+                "type": "Ambiguities - In Text Contradiction",
+                "original_text": "12.6 NOTICE.  Any notices hereunder shall be given to the appropriate party at the address specified below or at such other address as the party shall specify in writing.  Notice shall be deemed given: upon personal delivery; if sent by fax, upon confirmation of receipt; or if sent by a reputable overnight courier with tracking capabilities, one (1) day after the date of mailing: To i-Escrow:            i-Escrow, Inc.                         1730 South Amphlett Blvd., #215                         San Mateo, CA 94402                         Fax no. (650) 638-7890                         Attention:  President",
+                "changed_text": "12.6 NOTICE.  Any notices hereunder shall be given to the appropriate party at the address specified below or at such other address as the party shall specify in writing.  Notice shall be deemed given: only upon personal delivery; if sent by fax, only if acknowledged by phone; or if sent by a reputable overnight courier with tracking capabilities, only three (3) days after the date of mailing: To i-Escrow:            i-Escrow, Inc.                         1730 South Amphlett Blvd., #215                         San Mateo, CA 94402                         Fax no. (650) 638-7890                         Attention:  President",
+                "explanation": "The original clause allows for notices via fax upon confirmation of receipt and overnight courier after 1 day. The modified clause states the same methods are valid but changes the conditions for the fax and overnight delivery, and also changes the 'deemed given' timeline. This creates uncertainty regarding what constitutes valid notice, and may create disputes regarding timely notice and responses.",
+                "location": "12.6"
+            }
+        ]
+    }
+]

@@ -1,0 +1,31 @@
+[
+    {
+        "file_name": "ADMA BioManufacturing, LLC -  Amendment #3 to Manufacturing Agreement .txt",
+        "perturbation": [
+            {
+                "type": "Misaligned Terminology - Legal Contradiction",
+                "original_text": "Should ADMA fail to supply a minimum of [***] Batches of Product (the \"Minimum Volume\") of Product during the time period as specified in this Amendment #3, ADMA agrees that Sanofi Pasteur shall be entitled to obtain from ADMA as liquidated damages, and not a penalty, amounting to $[***] ([***]) USD. ADMA accepts and declares that the amount of the liquidated damages is a fair and equitable compensation, and not a penalty, for such failure in reaching the volume commitment within the timelines agreed herein and in regard to the value and use of the Source Plasma.",
+                "changed_text": "Should ADMA fail to supply a minimum of [***] Batches of Product (the \"Minimum Volume\") of Product during the time period as specified in this Amendment #3, ADMA agrees that Sanofi Pasteur shall be entitled to obtain from ADMA as liquidated damages, which may be considered a penalty, amounting to $[***] ([***]) USD. ADMA accepts and declares that the amount may be considered a punitive measure.",
+                "explanation": "By stating that the liquidated damages may be considered a penalty or a punitive measure, the contract introduces ambiguity and contradicts the initial intent that it is 'not a penalty.' This can invalidate the liquidated damages clause as it suggests it may be unenforceable under contract law if deemed punitive.",
+                "contradicted_law": "Contract Law - Enforceability of Liquidated Damages Clauses",
+                "location": "Section 2"
+            },
+            {
+                "type": "Misaligned Terminology - Legal Contradiction",
+                "original_text": "In the event of a non-conformance in the Source Plasma at the time of delivery of the Source plasma at ADMA's place, or in the event of damaged Source Plasma, which non-conformance, damage or loss in the Source Plasma occurred prior to the transfer of risks in the Source Plasma to ADMA as per Section 7 below, it is agreed upon by the Parties that Sanofi Pasteur shall not be responsible, nor liable, to compensate or indemnify ADMA for the loss of business arising from the fact that, in such a case, the Source Plasma will no longer be manufactured by ADMA and consequently Sanofi Pasteur will not pay for the unproduced batch.",
+                "changed_text": "In the event of any issue related to the Source Plasma at the time of delivery of the Source plasma at ADMA's place, or in the event of altered Source Plasma, regardless of when such issues, alterations, or losses occur, it is agreed upon by the Parties that Sanofi Pasteur may not be responsible, nor reliably expected to compensate or indemnify ADMA for the impact on business.",
+                "explanation": "Changing 'non-conformance' to 'any issue' and 'damaged' to 'altered' broadens the scope of what is included but also makes it less precise. Removing the explicit timing relative to risk transfer introduces uncertainty. Replacing 'shall not be responsible' with 'may not be responsible' changes the obligation and creates ambiguity regarding liability for the Source Plasma, potentially conflicting with standard commercial practices regarding risk of loss.",
+                "contradicted_law": "Uniform Commercial Code (UCC) - Risk of Loss provisions and Contract Law - Indemnification clauses",
+                "location": "Section 4"
+            },
+            {
+                "type": "Misaligned Terminology - Legal Contradiction",
+                "original_text": "ADMA agrees to assume the risks of loss to the Sanofi Pasteur Property and shall reimburse Sanofi Pasteur, at the dollar value, the Source Plasma in case of damage or loss.",
+                "changed_text": "ADMA might contribute to covering losses to the Sanofi Pasteur Property at a value to be fairly discussed should damage or loss be observed.",
+                "explanation": "This change significantly weakens ADMA's obligation. Replacing 'agrees to assume the risks' with 'might contribute to covering losses' and replacing 'shall reimburse' with 'at a value to be fairly discussed' makes the responsibility for reimbursement discretionary and subject to negotiation, instead of a contractual obligation. This creates legal uncertainty about the conditions for risk transfer and the expected method of compensation.",
+                "contradicted_law": "Contract Law - Obligation of Performance",
+                "location": "Section 7"
+            }
+        ]
+    }
+]

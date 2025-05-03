@@ -1,0 +1,28 @@
+[
+    {
+        "file_name": "AgapeAtpCorp_20191202_10-KA_EX-10.1_11911128_EX-10.1_SupplyAgreement.txt",
+        "perturbation": [
+            {
+                "type": "Structural Flaws - In Text Contradiction",
+                "original_text": "1.2 Term This agreement is for a term of ten (10) years. 1.3 Renewal This agreement will be automatically renewed at the end of every ten (10) year term, with each subsequent term of renewal being for a ten (10) year term. A six (6) months notice must be given by either party of their intention to terminate relations due to any reason other than breach of this agreement.",
+                "changed_text": "1.2 Term This agreement is for a term of ten (10) years. 1.3 Renewal This agreement will be renewed at the end of every ten (10) year term, subject to the Manufacturer's approval, with each subsequent term of renewal being for a ten (10) year term. A six (6) months notice must be given by either party of their intention to terminate relations due to any reason other than breach of this agreement.",
+                "explanation": "The original text states the agreement 'will be automatically renewed', implying a guaranteed renewal. The modified text introduces 'subject to the Manufacturer's approval', creating a contradiction and uncertainty regarding renewal.",
+                "location": "Section 1"
+            },
+            {
+                "type": "Structural Flaws - In Text Contradiction",
+                "original_text": "13.1 The Manufacturer hereby appoints the Customer to be the sole and exclusive agent for the promotion, sales, marketing, distribution and administration of the products listed in schedule A of this agreement based on minimum annual product purchase requirements as listed in Schedule B of this agreement. 13.2 The Manufacturer grants exclusive rights to the Customer for the term of ten (10) years from the date of the signing of this agreement and for an indefinite period upon the customer fulfilling the minimum annual purchase requirement as listed in Schedule B. of this agreement.",
+                "changed_text": "13.1 The Manufacturer hereby appoints the Customer to be the sole and exclusive agent for the promotion, sales, marketing, distribution and administration of the products listed in schedule A of this agreement based on minimum annual product purchase requirements as listed in Schedule B of this agreement. 13.2 The Manufacturer grants exclusive rights to the Customer for the term of ten (10) years from the date of the signing of this agreement, however this exclusivity is not guaranteed and can be revoked at anytime at the Manufacturer's discression regardless of whether the minimum purchase requirements are fulfilled.",
+                "explanation": "The original text grants exclusive rights, becoming indefinite upon fulfilling purchase requirements. The modified text adds 'however this exclusivity is not guaranteed and can be revoked at anytime at the Manufacturer's discression regardless of whether the minimum purchase requirements are fulfilled', contradicting the exclusivity and the conditions for indefinite continuation.",
+                "location": "Section 13"
+            },
+            {
+                "type": "Structural Flaws - In Text Contradiction",
+                "original_text": "14.6 Assignment The Manufacturer may not transfer or assign any of its rights or obligations under this agreement without the prior written consent of the Customer. The Customer may not freely transfer or assign its rights or obligations under this agreement without the prior written consent of the Manufacturer. Subject to the foregoing, this agreement will be binding upon and inure to the benefit of the parties hereto, their successors and assignees.",
+                "changed_text": "14.6 Assignment The Manufacturer may not transfer or assign any of its rights or obligations under this agreement without the prior written consent of the Customer. The Customer may freely transfer or assign its rights or obligations under this agreement without the prior written consent of the Manufacturer. Subject to the foregoing, this agreement will be binding upon and inure to the benefit of the parties hereto, their successors and assignees.",
+                "explanation": "The original text restricts both parties, while the modified text changes the restriction for the customer only, and states 'The Customer may freely transfer or assign its rights or obligations under this agreement without the prior written consent of the Manufacturer.', which gives the customer rights to freely transfer the agreement without consent, while the Manufacture still needs consent. This is a clear contradiction.",
+                "location": "Section 14"
+            }
+        ]
+    }
+]

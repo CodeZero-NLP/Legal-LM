@@ -1,0 +1,31 @@
+[
+    {
+        "file_name": "ABILITYINC_06_15_2020-EX-4.25-SERVICESAGREEMENT.txt",
+        "perturbation": [
+            {
+                "type": "Ambiguities - Ambiguous Legal Obligation",
+                "original_text": "(b) Provider shall maintain complete and accurate records relating to the provision of the Services under this Agreement, in such form as Recipient shall approve.",
+                "changed_text": "(b) Provider shall maintain records relating to the provision of the Services under this Agreement, in a format it deems appropriate.",
+                "explanation": "The original text states that Provider shall maintain accurate records in such form as Recipient shall approve, which implies a standard of accuracy and Recipient's control over format. By changing it to 'Provider shall maintain records in a format it deems appropriate,' the standard of accuracy is lowered, and Provider has complete discretion over the format. This introduces ambiguity and lowers the standard of compliance.",
+                "contradicted_law": "Israeli Contracts Law (General Part), 1973 requires contracts to be performed in good faith and in a reasonable manner. Giving the provider sole discretion over record-keeping format, potentially hindering transparency and auditability, might be viewed as acting in bad faith.",
+                "location": "1.2(b)"
+            },
+            {
+                "type": "Ambiguities - Ambiguous Legal Obligation",
+                "original_text": "(c) Provider shall use its best efforts to provide for employees or contractors to perform the Services, each of whose names, positions, and respective levels of experience and relevant licenses shall be set out in Exhibit A attached hereto (collectively, the \"Provider Representatives\"). Provider may not make any change in the Provider Representatives without the prior consent of the Recipient. Provider Representatives shall be dedicated to solely providing the Services to Recipient and shall not provide any such services or resources to Provider or any other customer of Provider.",
+                "changed_text": "(c) Provider should attempt to provide employees or contractors to perform the Services. Provider may make changes in the Provider Representatives as it sees fit. Provider Representatives shall generally dedicate efforts to providing the Services to Recipient and may provide some services to Provider or other customers.",
+                "explanation": "The original text mandates 'best efforts' to provide employees/contractors with specified qualifications, prohibits changes to representatives without consent, and requires sole dedication to Recipient's services. By changing 'shall use its best efforts' to 'should attempt,' the obligation is weakened. Removing the consent requirement for changing representatives gives Provider unchecked discretion. Allowing representatives to provide services to others dilutes their focus on Recipient's needs. This creates ambiguities regarding the required level of dedication and expertise.",
+                "contradicted_law": "Israeli Agency Law, 1965 requires agents (in this case, the Provider) to act with reasonable care and skill. Allowing representatives to split their time and potentially reducing their expertise might be viewed as a breach of this duty of care.",
+                "location": "1.2(c)"
+            },
+            {
+                "type": "Ambiguities - Ambiguous Legal Obligation",
+                "original_text": "Provider shall indemnify, defend, and hold harmless Recipient and its officers, directors, employees, agents, affiliates, successors, and permitted assigns (collectively, \"Indemnified Party\") against any and all losses, damages, liabilities, deficiencies, claims, actions, judgments, settlements, interest, awards, penalties, fines, costs, or expenses of whatever kind, including attorneys' fees, fees and the costs of enforcing any right to indemnification under this Agreement, and the cost of pursuing any insurance providers, incurred by Indemnified Party or awarded against Indemnified Party (collectively, \"Losses\"), relating to/arising out of or resulting from any claim of a third party or Recipient arising out of or occurring in connection with Provider's negligence, willful misconduct, or breach of this Agreement. Provider shall not enter into any settlement without Recipient's or Indemnified Party's prior written consent.",
+                "changed_text": "Provider will endeavor to indemnify Recipient and its officers, directors, employees, agents, affiliates, successors, and permitted assigns (collectively, \"Indemnified Party\") against losses relating to claims of a third party arising out of Provider's negligence or willful misconduct. Provider may enter into settlements at its discretion.",
+                "explanation": "The original text creates a strong indemnification obligation. Changing 'shall indemnify, defend, and hold harmless' to 'will endeavor to indemnify' weakens the obligation. Limiting indemnification to losses 'relating to claims of a third party arising out of Provider's negligence or willful misconduct' narrows the scope of protection. Removing the requirement for Recipient's consent to settlements gives Provider unilateral control over resolving claims. The changes introduce ambiguity and reduce the protections to Recipient.",
+                "contradicted_law": "Israeli Civil Wrongs Ordinance [New Version] requires indemnification to be clear and unequivocal. The modification makes it unclear to what extent Provider is liable. Additionally, The Israeli Contracts Law (General Part), 1973 requires parties to perform obligations and to exercise rights arising from a contract in good faith, and this change can be seen as limiting good faith.",
+                "location": "5.1"
+            }
+        ]
+    }
+]
