@@ -1,0 +1,15 @@
+[
+    {
+        "file_name": "UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf",
+        "perturbation": [
+            {
+                "type": "Omissions - Omission Legal Contradiction",
+                "original_text": "8.05     GOVERNING  LAW.  All  disputes  or  claims  by  Payment  Data  Systems\nhereunder  shall be resolved by arbitration in McLean, Virginia, pursuant to the\nrules of the American Arbitration Association. All disputes or claims by NETWORK\n1  hereunder shall be resolved by arbitration in San Antonio, Texas, pursuant to\nthe  rules  of  the  American  Arbitration  Association.",
+                "changed_text": "8.05     GOVERNING  LAW.  All  disputes  or  claims  hereunder shall be resolved by arbitration in McLean, Virginia, pursuant to the\nrules of the American Arbitration Association.",
+                "explanation": "This change omits the clause specifying that disputes or claims by Network 1 will be resolved by arbitration in San Antonio, Texas. By removing this clause, the contract unilaterally imposes arbitration in McLean, Virginia for all disputes, potentially violating Texas law which requires mutual agreement for arbitration clauses to be binding, especially for parties based in Texas. This creates a legal risk for the Affiliate, a Texas-based company, as they may be forced to arbitrate in a location unfavorable to them without clear mutual consent.",
+                "contradicted_law": "Texas Arbitration Act, specifically requirements for mutual consent and fairness in arbitration agreements.",
+                "location": "Section 8.05"
+            }
+        ]
+    }
+]

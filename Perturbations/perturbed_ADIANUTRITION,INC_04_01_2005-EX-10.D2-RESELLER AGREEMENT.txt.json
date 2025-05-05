@@ -1,0 +1,28 @@
+[
+    {
+        "file_name": "ADIANUTRITION,INC_04_01_2005-EX-10.D2-RESELLER AGREEMENT.txt",
+        "perturbation": [
+            {
+                "type": "Misaligned Terminology - In Text Contradiction",
+                "original_text": "This Reseller Agreement is entered as of this ___ day of _________, 2004 (\"Effective Date\") by and between PivX Corporation, a California corporation, having its principal place of business at 23 Corporate Plaza Drive, Newport Beach, California, 92661 (\"PivX\") and Detto Technologies, a Washington corporation, having its principal place of business at 14320 NE 21st Street, Suite 11, Bellevue, Washington, 98007 (\"Detto\").",
+                "changed_text": "This Reseller Agreement is entered as of this ___ day of _________, 2004 (\"Effective Date\") by and between PivX Corporation, a California corporation, having its principal place of business at 23 Corporate Plaza Drive, Newport Beach, California, 92661 (\"PivX\") and Detto Technologies, a Washington corporation, having its principal place of business at 14320 NE 21st Street, Suite 11, Bellevue, Washington, 98007 (\"Customer\").",
+                "explanation": "The original agreement clearly defines \"Detto\" as Detto Technologies. By changing the definition of \"Detto\" to \"Customer\" in the introductory paragraph, while maintaining \"Detto\" throughout the rest of the document, we introduce a contradiction. This creates uncertainty as to whether \"Detto\" and \"Customer\" are intended to be the same entity or different entities.",
+                "location": "First Paragraph"
+            },
+            {
+                "type": "Misaligned Terminology - In Text Contradiction",
+                "original_text": "2.3 SUPPORT FOR QWIK-FIX PRO. Detto shall provide for all customer support for Qwik-Fix Pro that it resells as governed by the terms set forth in Exhibit A.",
+                "changed_text": "2.3 SUPPORT FOR QWIK-FIX PRO. The Reseller shall provide for all client support for Qwik-Fix Pro that it resells as governed by the terms set forth in Exhibit A.",
+                "explanation": "Changing \"Detto\" to \"The Reseller\" and \"customer\" to \"client\" creates confusion. It's unclear if the 'Reseller' is Detto and if 'client' and 'customer' are intended to mean the same.",
+                "location": "Section 2.3"
+            },
+            {
+                "type": "Misaligned Terminology - In Text Contradiction",
+                "original_text": "Detto is an independent contractor, and nothing herein shall be construed to create an employer-employee, partnership, joint venture, or agency relationship between the parties. Detto shall have no authority, right or power to create any obligation or responsibility on behalf of PivX.",
+                "changed_text": "The Distributor is an independent contractor, and nothing herein shall be construed to create an employer-employee, partnership, joint venture, or agency relationship between the parties. The salesperson shall have no authority, right or power to create any obligation or responsibility on behalf of PivX.",
+                "explanation": "Replacing \"Detto\" with \"The Distributor\" and \"Detto\" with \"salesperson\" creates a contradiction. The agreement is between PivX and Detto, but now the text refers to \"The Distributor\" and a \"salesperson\", which are not defined and may not be the same entity. This creates ambiguity regarding the contractual obligations.",
+                "location": "Section 6.6"
+            }
+        ]
+    }
+]

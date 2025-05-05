@@ -1,0 +1,31 @@
+[
+    {
+        "file_name": "ADAMSGOLFINC_03_21_2005-EX-10.17-ENDORSEMENTAGREEMENT.txt",
+        "perturbation": [
+            {
+                "type": "Inconsistencies - Legal Contradiction",
+                "original_text": "ADAMS GOLF must exercise its right of termination within ninety (90) days of its senior management becoming aware of the conduct giving rise to the right of termination.",
+                "changed_text": "ADAMS GOLF must exercise its right of termination within thirty (30) days of its senior management becoming aware of the conduct giving rise to the right of termination.",
+                "explanation": "This change shortens the period ADAMS GOLF has to exercise its right of termination upon becoming aware of consultant misconduct, which may violate standard contract law principles requiring a reasonable period. 90 days is a reasonable time, decreasing this to 30 is not.",
+                "contradicted_law": "General contract law principles regarding reasonable notice and opportunity to cure.",
+                "location": "12"
+            },
+            {
+                "type": "Inconsistencies - Legal Contradiction",
+                "original_text": "Prior to publishing or placing any advertising or promotional material which uses CONSULTANT'S name, facsimile signature, nickname, voice or likeness, ADAMS GOLF shall submit the same to CONSULTANT, or CONSULTANT'S designee, for approval, which approval shall not be unreasonably withheld or delayed. If CONSULTANT disapproves, the reasons therefore shall be given to ADAMS GOLF in writing within three (3) business days or shall be deemed approved.",
+                "changed_text": "Prior to publishing or placing any advertising or promotional material which uses CONSULTANT'S name, facsimile signature, nickname, voice or likeness, ADAMS GOLF shall submit the same to CONSULTANT, or CONSULTANT'S designee, for approval, which approval shall not be unreasonably withheld or delayed. If CONSULTANT disapproves, the reasons therefore shall be given to ADAMS GOLF in writing within one (1) business day or shall be deemed approved.",
+                "explanation": "Reducing the consultant's response time to one business day to disapprove advertising materials is not commercially reasonable. This timeframe is too short and could be considered a breach of good faith and fair dealing and also create conflict.",
+                "contradicted_law": "General contract law principles requiring good faith and fair dealing and reasonable timeframes.",
+                "location": "20"
+            },
+            {
+                "type": "Inconsistencies - Legal Contradiction",
+                "original_text": "Notwithstanding any other paragraph of this Agreement, if either party commits any material breach of this Agreement, the other party may terminate for cause upon giving fifteen (15) days written notice of such cause and provided the breach is not rectified within such fifteen (15) day period.",
+                "changed_text": "Notwithstanding any other paragraph of this Agreement, if either party commits any material breach of this Agreement, the other party may terminate for cause upon giving five (5) days written notice of such cause and provided the breach is not rectified within such five (5) day period.",
+                "explanation": "Reducing the cure period for a material breach to five days may be deemed unreasonable in many jurisdictions, as it does not provide sufficient time to rectify significant breaches of contract. This timeframe is particularly problematic as Kansas law requires time to cure the breach before the contract can be terminated.",
+                "contradicted_law": "Breach of Contract / Kansas Law",
+                "location": "23"
+            }
+        ]
+    }
+]

@@ -1,82 +1,100 @@
 # context_bank.py
 from typing import Dict, List, Any, Optional
-import uuid
 from datetime import datetime
 
 class ContextBank:
     """
     Shared memory system accessible by all agents to store and retrieve
-    document context, analysis results, and retrieved information.
+    document context, analysis results, and retrieved information for a single document.
     """
-    
+
     def __init__(self):
-        """Initialize an empty context bank"""
-        self.documents = {}  # Store original documents and metadata
-        self.entities = {}   # Store named entities
-        self.clauses = {}    # Store extracted clauses
-        self.laws = {}       # Store relevant laws and precedents
-        self.contradictions = {}  # Store detected contradictions
-        self.suggestions = {}     # Store suggested fixes
-        
-    def add_document(self, document_id: str, content: str, metadata: Dict[str, Any]) -> str:
+        """Initialize an empty context bank for a single document"""
+        self.document: Optional[Dict[str, Any]] = None # Store the single document's data
+        self.entities: List[Dict[str, Any]] = []   # Store named entities
+        self.clauses: List[Dict[str, Any]] = []    # Store extracted clauses
+        self.laws: Dict[str, Dict[str, Any]] = {}       # Store relevant laws and precedents (assuming general)
+        self.clause_compliance_results: Dict[str, Dict[str, Any]] = {} # Store clause-level compliance results keyed by clause_id
+        self.jurisdiction: Optional[str] = None # Store legal jurisdiction for the document
+        self.document_analysis: Optional[Dict[str, Any]] = None # Store document-level analysis results
+        self.non_compliant_clauses: List[Dict[str, Any]] = []  # Store non-compliant clauses
+
+    def add_document(self, content: str, metadata: Dict[str, Any]):
         """
-        Add a document to the context bank.
-        
+        Set the document context in the bank.
+
         Args:
-            document_id: Unique identifier for the document
             content: Full text content of the document
             metadata: Additional information about the document
-            
-        Returns:
-            str: The document ID
         """
-        if not document_id:
-            document_id = str(uuid.uuid4())
-            
-        self.documents[document_id] = {
+        self.document = {
             "content": content,
             "metadata": metadata,
             "added_at": datetime.now().isoformat(),
             "processed": False
         }
-        return document_id
-    
-    def get_document(self, document_id: str) -> Optional[Dict[str, Any]]:
+        # Reset other document-specific fields when a new document is added
+        self.entities = []
+        self.clauses = []
+        self.clause_compliance_results = {} # Reset clause compliance results
+        self.jurisdiction = None
+        self.document_analysis = None # Reset document analysis
+
+    def get_document(self) -> Optional[Dict[str, Any]]:
         """
-        Retrieve a document from the context bank.
-        
-        Args:
-            document_id: ID of the document to retrieve
-            
+        Retrieve the document from the context bank.
+
         Returns:
-            Dict or None: The document data if found
+            Dict or None: The document data if set
         """
-        return self.documents.get(document_id)
+        return self.document
     
-    def add_entities(self, document_id: str, entities: List[Dict[str, Any]]):
+    def add_jurisdiction(self, jurisdiction: str):
         """
-        Store named entities extracted from a document.
+        Store the legal jurisdiction for the document.
+
+        Args:
+            jurisdiction: The legal jurisdiction (e.g., "State of California", "Federal")
+        """
+        self.jurisdiction = jurisdiction
+
+    def get_jurisdiction(self) -> Optional[str]:
+        """
+        Retrieve the legal jurisdiction for the document.
+
+        Returns:
+            str or None: The jurisdiction string if set, else None
+        """
+        return self.jurisdiction
+
+    def add_entities(self, entities: List[Dict[str, Any]]):
+        """
+        Store named entities extracted from the document.
         
         Args:
-            document_id: ID of the source document
             entities: List of extracted entities with their metadata
         """
-        if document_id not in self.entities:
-            self.entities[document_id] = []
-        self.entities[document_id].extend(entities)
+        self.entities.extend(entities)
     
-    def add_clauses(self, document_id: str, clauses: List[Dict[str, Any]]):
+    def get_entities(self) -> List[Dict[str, Any]]:
         """
-        Store clauses extracted from a document.
+        Retrieve all named entities extracted from the document.
+        
+        Returns:
+            List[Dict[str, Any]]: A list of extracted entities with their metadata
+        """
+        return self.entities
+    
+    def add_clauses(self, clauses: List[Dict[str, Any]]):
+        """
+        Store clauses extracted from the document.
         
         Args:
-            document_id: ID of the source document
             clauses: List of extracted clauses with their metadata
         """
-        if document_id not in self.clauses:
-            self.clauses[document_id] = []
-        self.clauses[document_id].extend(clauses)
+        self.clauses.extend(clauses)
     
+    # Assuming add_law remains unchanged as laws might be general
     def add_law(self, law_id: str, content: str, source: str, metadata: Dict[str, Any]):
         """
         Add a relevant law or precedent to the context bank.
@@ -93,58 +111,105 @@ class ContextBank:
             "metadata": metadata,
             "added_at": datetime.now().isoformat()
         }
-    
-    def add_contradiction(self, document_id: str, contradiction: Dict[str, Any]):
+
+    def add_clause_compliance_result(self, clause_id: str, analysis: Dict[str, Any]):
         """
-        Store a detected contradiction.
+        Store the compliance analysis result for a specific clause.
+
+        Args:
+            clause_id: The unique identifier of the clause.
+            analysis: A dictionary containing the compliance analysis details for the clause.
+                      Expected to include keys like 'issues', 'issue_count', etc.
+        """
+        self.clause_compliance_results[clause_id] = analysis
+
+    def get_clause_compliance_result(self, clause_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve the compliance analysis result for a specific clause.
+
+        Args:
+            clause_id: The unique identifier of the clause.
+
+        Returns:
+            Optional[Dict[str, Any]]: The analysis dictionary if found, else None.
+        """
+        return self.clause_compliance_results.get(clause_id)
+
+    def get_all_clause_compliance_results(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Retrieve all stored clause compliance analysis results.
+
+        Returns:
+            Dict[str, Dict[str, Any]]: A dictionary where keys are clause IDs
+                                        and values are the analysis results.
+        """
+        return self.clause_compliance_results
+
+    def add_document_analysis(self, analysis: Dict[str, Any]):
+        """
+        Store the document-level compliance analysis results.
+
+        Args:
+            analysis: A dictionary containing the analysis results.
+                      Expected structure includes keys like 'document_id',
+                      'analysis_id', 'clauses_analyzed', 'non_compliant_clauses',
+                      'total_issues', 'has_issues', 'timestamp',
+                      'estimated_jurisdiction', 'estimated_document_type'.
+        """
+        self.document_analysis = analysis
+
+    def get_document_analysis(self) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve the document-level compliance analysis results.
+
+        Returns:
+            Optional[Dict[str, Any]]: The analysis dictionary if stored, else None.
+        """
+        return self.document_analysis
+    
+
+    def add_non_compliant_clauses(self, clauses: List[Dict[str, Any]]):
+        """
+        Store non-compliant clauses identified during analysis.
         
         Args:
-            document_id: ID of the document containing the contradiction
-            contradiction: Details about the contradiction
+            clauses: List of non-compliant clauses with their metadata and analysis results.
         """
-        if document_id not in self.contradictions:
-            self.contradictions[document_id] = []
-        self.contradictions[document_id].append(contradiction)
-    
-    def add_suggestion(self, document_id: str, clause_id: str, suggestion: Dict[str, Any]):
+        self.non_compliant_clauses.extend(clauses)
+
+
+    def get_all_non_compliant_clauses(self) -> List[Dict[str, Any]]:
         """
-        Store a suggested fix for a contradiction.
-        
-        Args:
-            document_id: ID of the document
-            clause_id: ID of the clause being fixed
-            suggestion: Details about the suggested fix
-        """
-        key = f"{document_id}_{clause_id}"
-        if key not in self.suggestions:
-            self.suggestions[key] = []
-        self.suggestions[key].append(suggestion)
-    
-    def get_all_contradictions(self, document_id: str) -> List[Dict[str, Any]]:
-        """
-        Get all contradictions for a document.
-        
-        Args:
-            document_id: ID of the document
+        Get all non-compliant clauses stored for the document.
             
         Returns:
-            List: All contradictions for the document
+            List[Dict[str, Any]]: A list of non-compliant clauses.
         """
-        return self.contradictions.get(document_id, [])
+        return self.non_compliant_clauses
     
-    def get_all_suggestions(self, document_id: str) -> Dict[str, List[Dict[str, Any]]]:
+    def get_all(self) -> Dict[str, Any]:
         """
-        Get all suggestions for a document.
+        Get all data currently stored in the context bank.
         
-        Args:
-            document_id: ID of the document
+        Returns:
+            Dict[str, Any]: A dictionary containing all stored data.
+        """
+        return {
+            "document": self.document,
+            "entities": self.entities,
+            "clauses": self.clauses,
+            "laws": self.laws,
+            "jurisdiction": self.jurisdiction,
+            "clause_compliance_results": self.clause_compliance_results,
+            "document_analysis": self.document_analysis,
+            "non_compliant_clauses": self.non_compliant_clauses
+        }
+    
+    def get_clauses(self) -> List[Dict[str, Any]]:
+        """
+        Get all clauses stored for the document.
             
         Returns:
-            Dict: All suggestions organized by clause ID
+            List[Dict[str, Any]]: A list of clauses.
         """
-        result = {}
-        for key, suggestions in self.suggestions.items():
-            doc_id, clause_id = key.split('_', 1)
-            if doc_id == document_id:
-                result[clause_id] = suggestions
-        return result
+        return self.clauses
