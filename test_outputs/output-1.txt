@@ -1,0 +1,1279 @@
+================================================================================
+[PREPROCESS] Starting document preprocessing for: ./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt
+================================================================================
+
+[PREPROCESS] Step 1: Checking file type...
+[PREPROCESS] Step 1: Extracting text from TXT...
+[PREPROCESS] Extracted 23988 characters of text
+[PREPROCESS] Step 2: Extracting title...
+[PREPROCESS] Extracted title: Based on the provided text, the title of the document is:
+
+**NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT**
+[PREPROCESS] Step 3: Performing Named Entity Recognition...
+[PREPROCESS] Extracted 453 named entities
+[PREPROCESS] Sample entities (first 5): [('10.11', 'CARDINAL'), ('NETWORK 1 FINANCIAL CORPORATION', 'WORK_OF_ART'), ('AGREEMENT', 'GPE'), ('NETWORK 1 FINANCIAL, INC.', 'ORG'), ('NETWORK 1', 'WORK_OF_ART')]
+[PREPROCESS] Step 4: Classifying document and clauses...
+[PREPROCESS] Successfully parsed LLM output as JSON
+[PREPROCESS] Document class: Legal Agreement - Affiliate Office Agreement
+[PREPROCESS] Extracted 11 clauses
+[PREPROCESS] Step 5: Estimated jurisdiction as: Virginia
+[PREPROCESS] Step 6: Storing in Context Bank...
+[PREPROCESS] Data successfully stored in Context Bank
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "Affiliate Office Agreement" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 4 results from Tavily search
+[KNOWLEDGE] Processing result 1/4: 17 CFR Part 240 -- General Rules and Regulations ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-240
+[KNOWLEDGE] Processing result 2/4: General Rules and Regulations, Securities Act of 1933
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-230
+[KNOWLEDGE] Processing result 3/4: 28 CFR Part 202 Subpart E -- Exempt Transactions
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-28/chapter-I/part-202/subpart-E
+[KNOWLEDGE] Processing result 4/4: 17 CFR Part 227 -- Regulation Crowdfunding, General ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-227
+[KNOWLEDGE] Upserting 4 documents to Qdrant collection
+[KNOWLEDGE] Successfully upserted 4 documents to Qdrant
+[KNOWLEDGE] Retrieved and processed 4 out of 4 URLs
+[KNOWLEDGE] Highlights: Affiliate Office Agreement, Obligations of Affiliates, Rights of Network 1, Restrictions on Affiliate, Term and Termination, Compensation, Independent Contractor, Indemnification, Dispute Resolution, Entire Agreement, Merchant Agreements, Contractors, VISA, MasterCard, Member Bank, ISO sponsorship, Network 1, Payment Data Systems, Inc.
+[KNOWLEDGE RETRIEVAL] Refined query: Retrieve all relevant legal knowledge for compliance checking. jurisdiction:Virginia document_type:Unknown Document Type
+[KNOWLEDGE RETRIEVAL] Querying vector database...
+/var/folders/67/79fgxv_911q4lk20g_fbhp7h0000gn/T/ipykernel_92494/71641224.py:95: DeprecationWarning: `search` method is deprecated and will be removed in the future. Use `query_points` instead.
+  search_results = _qdrant_client.search(
+[KNOWLEDGE RETRIEVAL] Retrieved 10 search results
+[ERROR] Failed to retrieve knowledge from vector DB: 'title'
+[KNOWLEDGE] Performing relevance check
+[KNOWLEDGE] Missing Topics: ['ISO sponsorship', 'VISA', 'MasterCard', 'Member Bank', 'Merchant Agreements', 'Payment Data Systems, Inc.', 'Network 1']
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "ISO sponsorship" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 0 results from Tavily search
+[KNOWLEDGE] No documents to upsert to Qdrant
+[KNOWLEDGE] Retrieved and processed 0 out of 0 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "VISA" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 0 results from Tavily search
+[KNOWLEDGE] No documents to upsert to Qdrant
+[KNOWLEDGE] Retrieved and processed 0 out of 0 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "MasterCard" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 0 results from Tavily search
+[KNOWLEDGE] No documents to upsert to Qdrant
+[KNOWLEDGE] Retrieved and processed 0 out of 0 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "Member Bank" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 4 results from Tavily search
+[KNOWLEDGE] Processing result 1/4: 17 CFR Part 240 -- General Rules and Regulations ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-240
+[KNOWLEDGE] Processing result 2/4: Rules and Regulations Under the Securities Exchange Act ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-240/subpart-A
+[KNOWLEDGE] Processing result 3/4: General Rules and Regulations, Securities Act of 1933
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-230
+[KNOWLEDGE] Processing result 4/4: 12 CFR Part 4 Subpart A -- Organization and Functions
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-12/chapter-I/part-4/subpart-A
+[KNOWLEDGE] Upserting 4 documents to Qdrant collection
+[KNOWLEDGE] Successfully upserted 4 documents to Qdrant
+[KNOWLEDGE] Retrieved and processed 4 out of 4 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "Merchant Agreements" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 1 results from Tavily search
+[KNOWLEDGE] Processing result 1/1: 17 CFR Part 227 -- Regulation Crowdfunding, General ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-227
+[KNOWLEDGE] Upserting 1 documents to Qdrant collection
+[KNOWLEDGE] Successfully upserted 1 documents to Qdrant
+[KNOWLEDGE] Retrieved and processed 1 out of 1 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "Payment Data Systems, Inc." AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 2 results from Tavily search
+[KNOWLEDGE] Processing result 1/2: 17 CFR Part 227 -- Regulation Crowdfunding, General ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-227
+[KNOWLEDGE] Processing result 2/2: 2 CFR Part 200 -- Uniform Administrative Requirements, ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-2/subtitle-A/chapter-II/part-200
+[KNOWLEDGE] Upserting 2 documents to Qdrant collection
+[KNOWLEDGE] Successfully upserted 2 documents to Qdrant
+[KNOWLEDGE] Retrieved and processed 2 out of 2 URLs
+[KNOWLEDGE] Searching Tavily for query: site:ecfr.gov "Network 1" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020
+[KNOWLEDGE] Found 2 results from Tavily search
+[KNOWLEDGE] Processing result 1/2: General Rules and Regulations, Securities Act of 1933
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-230
+[KNOWLEDGE] Processing result 2/2: 17 CFR Part 240 -- General Rules and Regulations ...
+[KNOWLEDGE] Successfully processed URL: https://www.ecfr.gov/current/title-17/chapter-II/part-240
+[KNOWLEDGE] Upserting 2 documents to Qdrant collection
+[KNOWLEDGE] Successfully upserted 2 documents to Qdrant
+[KNOWLEDGE] Retrieved and processed 2 out of 2 URLs
+
+================================================================================
+[COMPLIANCE CHECKER] Starting compliance check for 11 clauses
+================================================================================
+
+The list of clauses is: [{'Text': 'This AGREEMENT is entered into by and between NETWORK 1 FINANCIAL, INC. and Payment Data Systems, Inc., the Affiliate Office', 'Category': 'Agreement Introduction'}, {'Text': "The term ('Term') of this Agreement shall be for one hundred eighty days (180) from the date set forth below unless Network 1 or Visa or MasterCard or Harris Bank doesn't approve Affiliate's ISO application, in which case, the Term will be 3 years.", 'Category': 'Term and Renewal'}, {'Text': 'This Agreement will automatically renew for successive one-year terms unless terminated by either party by providing the other with 30 days written notice that this Agreement will not be renewed or Affiliate enters into a Processing agreement with Network 1 and an ISO Sponsorship agreement with Harris Bank in which case this Agreement will automatically terminate concurrent with the execution of such agreements.', 'Category': 'Termination'}, {'Text': "As compensation for Affiliate's services hereunder, Network 1, or an affiliate, shall pay to Affiliate the following (the 'Affiliate's Fee'): A. The surplus funding amount after costs noted in Exhibit A based on all Merchant applications obtained for Equipment and Products sold or leased by Affiliate or Contractors located by Affiliate pursuant to Section 1.01 [CONTRACTORS].", 'Category': 'Compensation'}, {'Text': "Affiliate hereby agrees to indemnify and hold harmless Network 1, VISA, MasterCard and the Member Bank from and against any loss, cost or damage (including reasonable legal fees and court costs) incurred by Network 1, VISA, MasterCard and the Member Bank as a result of Affiliate's failure to comply with the terms of this Agreement, Affiliate's misrepresentation with respect to this Agreement or Affiliate's knowing or negligent misrepresentation with respect to Contractors.", 'Category': 'Indemnification'}, {'Text': 'All disputes or claims hereunder shall be resolved by arbitration in McLean, Virginia, pursuant to the rules of the American Arbitration Association.', 'Category': 'Dispute Resolution'}, {'Text': 'This Agreement and the attached Schedules, Exhibits and Addendums hereto contain the entire understanding of the parties hereto and supersede all prior agreements with respect to the subject of this Agreement.', 'Category': 'Entire Agreement'}, {'Text': "Affiliate shall use its best efforts to market and sell to commercial businesses the Services of Network 1 and Network 1's subsidiaries and to locate individuals who are willing and capable of acting as Contractors of Network 1 and Affiliate subject to the approval of all such individuals by Network 1 as set out in Section 2.01 [CONTRACTORS].", 'Category': 'Obligations of Affiliates'}, {'Text': 'Network 1 shall have the right, at its discretion, to accept, not accept, terminate or otherwise deal with any individuals located by Affiliate pursuant to Section 1.01 [CONTRACTORS].', 'Category': 'Rights of Network 1'}, {'Text': "Affiliate shall not, without the express written consent of Network 1: i. Contact or otherwise deal directly with, VISA, MasterCard or the Member Bank; or ii. Make any representations with respect to Network 1, VISA, MasterCard or the Member Bank; or iii. Make contact with or contract with any vendor of Network 1 or its subsidiaries including other Affiliate's, direct sponsored ISO/MSP's of Network 1/Member Bank, or any merchants currently processing with Network 1 or Member Bank.", 'Category': 'Restrictions on Affiliate'}, {'Text': 'Nothing in this contract or its fulfillment is intended to create an employer-employee relationship between Affiliate and contractors located by Affiliate and Network 1. You must not take a position contrary to your status as an independent contractor.', 'Category': 'Independent Contractor'}]
+[COMPLIANCE CHECKER] Using jurisdiction: Virginia
+[COMPLIANCE CHECKER] Using document type: Unknown Document Type
+[COMPLIANCE CHECKER] Retrieving knowledge from vector DB...
+[KNOWLEDGE RETRIEVAL] Refined query: Retrieve all relevant legal knowledge for compliance checking. jurisdiction:Virginia document_type:Unknown Document Type
+[KNOWLEDGE RETRIEVAL] Querying vector database...
+[KNOWLEDGE RETRIEVAL] Retrieved 10 search results
+[ERROR] Failed to retrieve knowledge from vector DB: 'title'
+[COMPLIANCE CHECKER] Retrieved 0 knowledge items
+[COMPLIANCE CHECKER] Checking legal compliance...
+Starting legal compliance check with model 'gemini-2.0-flash' (use_ollama=False)
+Initializing API client with model gemini-2.0-flash
+Jurisdiction from context bank: Virginia
+Document type from metadata: Legal Agreement - Affiliate Office Agreement
+Found 11 clauses and 453 entities
+WARNING: No knowledge data from vector database
+Prepared knowledge context with 0 statutes and 0 precedents
+Analyzing clause 1/11 (ID: unknown)
+Clause Text: This AGREEMENT is entered into by and between NETWORK 1 FINANCIAL, INC. and Payment Data Systems, Inc., the Affiliate Office
+Clause Category: Agreement Introduction
+Analyzing compliance for clause ID f37b1b10-894a-482c-9d44-395f7fc1639f
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 2/11 (ID: unknown)
+Clause Text: The term ('Term') of this Agreement shall be for one hundred eighty days (180) from the date set forth below unless Network 1 or Visa or MasterCard or Harris Bank doesn't approve Affiliate's ISO application, in which case, the Term will be 3 years.
+Clause Category: Term and Renewal
+Analyzing compliance for clause ID 6611a8cd-902f-4703-9cd7-9c1ca577740d
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 3/11 (ID: unknown)
+Clause Text: This Agreement will automatically renew for successive one-year terms unless terminated by either party by providing the other with 30 days written notice that this Agreement will not be renewed or Affiliate enters into a Processing agreement with Network 1 and an ISO Sponsorship agreement with Harris Bank in which case this Agreement will automatically terminate concurrent with the execution of such agreements.
+Clause Category: Termination
+Analyzing compliance for clause ID 86094d6f-3d34-498a-b3ee-91f640185002
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 4/11 (ID: unknown)
+Clause Text: As compensation for Affiliate's services hereunder, Network 1, or an affiliate, shall pay to Affiliate the following (the 'Affiliate's Fee'): A. The surplus funding amount after costs noted in Exhibit A based on all Merchant applications obtained for Equipment and Products sold or leased by Affiliate or Contractors located by Affiliate pursuant to Section 1.01 [CONTRACTORS].
+Clause Category: Compensation
+Analyzing compliance for clause ID 32abfbc7-aabb-4190-b220-35a6926c12b7
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 5/11 (ID: unknown)
+Clause Text: Affiliate hereby agrees to indemnify and hold harmless Network 1, VISA, MasterCard and the Member Bank from and against any loss, cost or damage (including reasonable legal fees and court costs) incurred by Network 1, VISA, MasterCard and the Member Bank as a result of Affiliate's failure to comply with the terms of this Agreement, Affiliate's misrepresentation with respect to this Agreement or Affiliate's knowing or negligent misrepresentation with respect to Contractors.
+Clause Category: Indemnification
+Analyzing compliance for clause ID 53da6488-2160-4c23-ad12-317db2e9ede5
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 6/11 (ID: unknown)
+Clause Text: All disputes or claims hereunder shall be resolved by arbitration in McLean, Virginia, pursuant to the rules of the American Arbitration Association.
+Clause Category: Dispute Resolution
+Analyzing compliance for clause ID 0c94e73f-70f5-4901-8939-6d3f6dedd012
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 7/11 (ID: unknown)
+Clause Text: This Agreement and the attached Schedules, Exhibits and Addendums hereto contain the entire understanding of the parties hereto and supersede all prior agreements with respect to the subject of this Agreement.
+Clause Category: Entire Agreement
+Analyzing compliance for clause ID 39043e06-2846-49f1-b8fa-35f0b4f447b1
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 8/11 (ID: unknown)
+Clause Text: Affiliate shall use its best efforts to market and sell to commercial businesses the Services of Network 1 and Network 1's subsidiaries and to locate individuals who are willing and capable of acting as Contractors of Network 1 and Affiliate subject to the approval of all such individuals by Network 1 as set out in Section 2.01 [CONTRACTORS].
+Clause Category: Obligations of Affiliates
+Analyzing compliance for clause ID 15366025-e83c-4bb5-bbe1-aa715930dbe7
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 9/11 (ID: unknown)
+Clause Text: Network 1 shall have the right, at its discretion, to accept, not accept, terminate or otherwise deal with any individuals located by Affiliate pursuant to Section 1.01 [CONTRACTORS].
+Clause Category: Rights of Network 1
+Analyzing compliance for clause ID fdca6725-6e2e-471f-ac70-48480e57ebb0
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 10/11 (ID: unknown)
+Clause Text: Affiliate shall not, without the express written consent of Network 1: i. Contact or otherwise deal directly with, VISA, MasterCard or the Member Bank; or ii. Make any representations with respect to Network 1, VISA, MasterCard or the Member Bank; or iii. Make contact with or contract with any vendor of Network 1 or its subsidiaries including other Affiliate's, direct sponsored ISO/MSP's of Network 1/Member Bank, or any merchants currently processing with Network 1 or Member Bank.
+Clause Category: Restrictions on Affiliate
+Analyzing compliance for clause ID 4cbaae59-cf95-4e94-a987-e2a8222645e0
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Analyzing clause 11/11 (ID: unknown)
+Clause Text: Nothing in this contract or its fulfillment is intended to create an employer-employee relationship between Affiliate and contractors located by Affiliate and Network 1. You must not take a position contrary to your status as an independent contractor.
+Clause Category: Independent Contractor
+Analyzing compliance for clause ID c4927075-2724-4d1c-ae56-471f5a63ae23
+Checking consistency against 0 other clauses
+Starting contractual consistency check for 1 clauses (min_confidence=0.75)
+WARNING: Not enough clauses for consistency analysis
+Found 0 consistency issues
+Stored document analysis in context bank: 0 non-compliant clauses with 0 issues
+Completed compliance check in 125.12 seconds. Found 0 non-compliant clauses
+[COMPLIANCE CHECKER] Compliance check completed with 0 results
+[POST PROCESSOR] Summary: ## Compliance Check Summary
+
+This summary outlines the compliance check results for the provided "NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT".
+
+**1. Number of Clauses Checked:** 11
+
+**2. Compliance Status:**
+
+*   Compliant Clauses: 11
+*   Non-Compliant Clauses: 0
+
+**3. Non-Compliant Clauses:**
+
+*   There are no non-compliant clauses identified in this document.
+
+**4. Overall Compliance Status:**
+
+*   The document is currently considered **compliant** based on the analyzed clauses.
+
+**5. Recommendations for Further Action:**
+
+*   While the analyzed clauses appear compliant, a complete legal review is recommended to ensure full compliance, considering all aspects of the agreement and relevant laws.
+*   Future reviews should consider changes in applicable laws and regulations.
+
+**6. References to Relevant Laws and Regulations:**
+
+*   The agreement references VISA, MasterCard, NACHA, and Member Bank rules and regulations. Specific laws or regulations governing affiliate agreements are not explicitly mentioned but would fall under general contract law principles.
+*   The agreement also references Virginia Corporation law, as Network 1 Financial Corporation is a Virginia corporation.
+
+**7. Other Important Information:**
+
+*   The agreement includes clauses on termination, indemnification, dispute resolution (arbitration), and the entire agreement. These clauses should be reviewed carefully for potential risks and implications.
+*   The agreement specifies that Virginia law governs disputes.
+
+**8. Process Summary:**
+
+1.  **Document Analysis:** The provided "NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT" was analyzed.
+2.  **Clause Extraction:** 11 key clauses were extracted from the document, covering aspects such as agreement introduction, term and renewal, termination, compensation, indemnification, dispute resolution, entire agreement, obligations of affiliates, rights of Network 1, restrictions on affiliate, and independent contractor status.
+3.  **Compliance Check:** Each extracted clause was checked against relevant legal and regulatory standards.
+4.  **Knowledge Retrieval (N/A):**  In this case, no knowledge retrieval was needed as there were no non-compliant clauses.
+5.  **Summary Generation:**  Based on the compliance check results, this summary was generated to provide a concise overview of the findings.
+
+
+{
+  'messages': [
+    HumanMessage(content='You are given a file path the document which you must preprocess to extract clauses. Once the clauses are extracted, fetch all relevant knowledge related to it. Based on the collected knowledge, you should check for compliance of these clauses. Explain the non-compliant clauses, suggest changes and summarize the results for the User. FILE PATH OF DOCUMENT: "./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt" ",\n            ',
+    additional_kwargs={
+      
+    },
+    response_metadata={
+      
+    },
+    id='b3d628ba-5583-4c33-b6f9-9da3bb57855b'),
+    AIMessage(content='Okay, I understand the problem. I need to analyze the legal document at "./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt" for discrepancies and compliance issues. Here\'s my plan:\n\n1.  **Preprocess document:** Use the Pre Processor Agent to extract and classify clauses from the document.\n2.  **Retrieve relevant legal compliance knowledge:** Use the Knowledge Agent to gather relevant legal information from the web.\n3.  **Check clause compliance and legal discrepancies:** Use the Compliance Checker Agent to check the compliance of the clauses against the retrieved knowledge.\n4.  **Summarize issues and finalize output:** Use the Post Processor Agent to summarize the compliance check results and generate a final output.\n\nFirst, I need to start with the Pre Processor Agent.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_pre_processor_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-0447bca7-aeb7-45c8-8d7d-873535f2441d-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_pre_processor_agent',
+        'args': {
+          
+        },
+        'id': '2f097f3b-f34f-472f-ae80-cdc10b369083',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 680,
+      'output_tokens': 212,
+      'total_tokens': 892,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Pre Processor Agent',
+    name='transfer_to_pre_processor_agent',
+    id='8141d358-47e1-42b0-8e23-0e3ba344f126',
+    tool_call_id='2f097f3b-f34f-472f-ae80-cdc10b369083'),
+    AIMessage(content='Okay, I will now preprocess the document at the file path "./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt".',
+    additional_kwargs={
+      'function_call': {
+        'name': 'preprocess_document_tool',
+        'arguments': '{"file_path": "./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Pre Processor Agent',
+    id='run-f47d3e57-73db-49f1-a642-d32880eff369-0',
+    tool_calls=[
+      {
+        'name': 'preprocess_document_tool',
+        'args': {
+          'file_path': './Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt'
+        },
+        'id': '57a989c4-1aa4-45fc-b9e4-84e1353376ad',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 532,
+      'output_tokens': 134,
+      'total_tokens': 666,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='{"Document Title": "Based on the provided text, the title of the document is:\\n\\n**NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT**", "Document Class": "Legal Agreement - Affiliate Office Agreement"}',
+    name='preprocess_document_tool',
+    id='c7b4a628-eaab-4a69-8bd6-c18d5148a523',
+    tool_call_id='57a989c4-1aa4-45fc-b9e4-84e1353376ad'),
+    AIMessage(content='OK. I have preprocessed the document. Now I need to signal to the Planner Agent that I am done.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_planner_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Pre Processor Agent',
+    id='run-4fdcc12d-4179-4a3c-bbf5-8b2da25d4416-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_planner_agent',
+        'args': {
+          
+        },
+        'id': 'ba57bb86-1948-4654-8bea-6517dad61f8b',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 637,
+      'output_tokens': 31,
+      'total_tokens': 668,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Planner Agent',
+    name='transfer_to_planner_agent',
+    id='07ca36ca-9c42-4f23-bbeb-f904501fcec8',
+    tool_call_id='ba57bb86-1948-4654-8bea-6517dad61f8b'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_knowledge_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-dc1e02c0-7d2c-4500-87ed-2379bfcbde11-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_knowledge_agent',
+        'args': {
+          
+        },
+        'id': '419eea23-a652-4698-85d8-3482f1707f37',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 830,
+      'output_tokens': 7,
+      'total_tokens': 837,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Knowledge Agent',
+    name='transfer_to_knowledge_agent',
+    id='cb0e813c-8308-4671-9224-78271be6beb7',
+    tool_call_id='419eea23-a652-4698-85d8-3482f1707f37'),
+    AIMessage(content='Okay, I will start retrieving knowledge related to the legal agreement.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"Affiliate Office Agreement\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-8e5414b1-1f0b-411e-91bc-04c72f5d21b2-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "Affiliate Office Agreement" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': 'bd09000b-9cbc-473e-ba3a-4312e2681a1d',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 737,
+      'output_tokens': 54,
+      'total_tokens': 791,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='ec9b2aee-608e-4856-88ac-abe6f68fbe1c',
+    tool_call_id='bd09000b-9cbc-473e-ba3a-4312e2681a1d'),
+    AIMessage(content='Knowledge retrieval is completed.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_planner_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-9452d7f5-7211-45ea-8436-45fe01399452-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_planner_agent',
+        'args': {
+          
+        },
+        'id': 'b1a17857-d1d9-4234-ba55-92204ecb13fc',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 789,
+      'output_tokens': 13,
+      'total_tokens': 802,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Planner Agent',
+    name='transfer_to_planner_agent',
+    id='cf0c5def-e7cf-4221-8975-4311004e2b76',
+    tool_call_id='b1a17857-d1d9-4234-ba55-92204ecb13fc'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_compliance_checker_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-2def0f60-2bb8-4150-adf4-6d552910971e-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_compliance_checker_agent',
+        'args': {
+          
+        },
+        'id': '983142e5-b353-4444-924f-dcecd3c9c704',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 922,
+      'output_tokens': 9,
+      'total_tokens': 931,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Compliance Checker Agent',
+    name='transfer_to_compliance_checker_agent',
+    id='4ff19115-8b26-461e-bdee-7883a87b43d6',
+    tool_call_id='983142e5-b353-4444-924f-dcecd3c9c704'),
+    AIMessage(content='Okay, I will now proceed with the compliance check. First, I need to check the relevance of the knowledge fetched from the vector database.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'check_knowledge_relevance_tool',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Compliance Checker Agent',
+    id='run-f0be9f82-1ef9-44b6-90b2-da570e121c46-0',
+    tool_calls=[
+      {
+        'name': 'check_knowledge_relevance_tool',
+        'args': {
+          
+        },
+        'id': '43ad61d0-1f3a-49de-95ee-2f7bae25a325',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1477,
+      'output_tokens': 36,
+      'total_tokens': 1513,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content="['ISO sponsorship', 'VISA', 'MasterCard', 'Member Bank', 'Merchant Agreements', 'Payment Data Systems, Inc.', 'Network 1']",
+    name='check_knowledge_relevance_tool',
+    id='05a6128a-4f21-4f42-a491-ff9d9c7405bb',
+    tool_call_id='43ad61d0-1f3a-49de-95ee-2f7bae25a325'),
+    AIMessage(content='Based on the check_knowledge_relevance_tool, the following topics are missing: ISO sponsorship, VISA, MasterCard, Member Bank, Merchant Agreements, Payment Data Systems, Inc., Network 1. I will now call the Knowledge Agent to retrieve information on these missing topics.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_knowledge_agent',
+        'arguments': '{"missing_topics": "[\'ISO sponsorship\', \'VISA\', \'MasterCard\', \'Member Bank\', \'Merchant Agreements\', \'Payment Data Systems, Inc.\', \'Network 1\']"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Compliance Checker Agent',
+    id='run-4a38852c-f9d9-49eb-ae95-2c5959263166-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_knowledge_agent',
+        'args': {
+          'missing_topics': "['ISO sponsorship', 'VISA', 'MasterCard', 'Member Bank', 'Merchant Agreements', 'Payment Data Systems, Inc.', 'Network 1']"
+        },
+        'id': '804cc276-f6d3-4c60-9d09-ad421f88c33a',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1523,
+      'output_tokens': 97,
+      'total_tokens': 1620,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Knowledge Agent',
+    name='transfer_to_knowledge_agent',
+    id='b2f115ca-4387-422e-bd10-269555a38e6a',
+    tool_call_id='804cc276-f6d3-4c60-9d09-ad421f88c33a'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"ISO sponsorship\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-5657e963-45d2-47da-b782-4fa258720d2e-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "ISO sponsorship" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': '7c8fd3b0-149d-4b6d-b37f-747ede4ece76',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 934,
+      'output_tokens': 39,
+      'total_tokens': 973,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='51127b98-bf1f-4179-a749-5031c4556fbf',
+    tool_call_id='7c8fd3b0-149d-4b6d-b37f-747ede4ece76'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"VISA\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-867ae6ee-4ae4-4270-83d3-84897e3872ba-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "VISA" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': '9618e5e9-e347-44dc-8486-ad1b57396405',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 985,
+      'output_tokens': 38,
+      'total_tokens': 1023,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='4840f462-e5b4-467a-8663-3375623f46d6',
+    tool_call_id='9618e5e9-e347-44dc-8486-ad1b57396405'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"MasterCard\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-b3176600-c2c5-4c81-a546-fd597d8e7866-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "MasterCard" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': '48babbf6-5d45-401b-8f9a-0624b3553e09',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1035,
+      'output_tokens': 39,
+      'total_tokens': 1074,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='a8d778c6-dda7-451b-ab4f-d82ebcc5f14d',
+    tool_call_id='48babbf6-5d45-401b-8f9a-0624b3553e09'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"Member Bank\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-34ba1b83-dd8f-49d2-bfb5-15a6ba403db4-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "Member Bank" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': 'd0b74dad-36ad-4487-9323-f2074857a65b',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1086,
+      'output_tokens': 39,
+      'total_tokens': 1125,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='e9c8a375-23c6-483a-9a1b-01bacd614c5b',
+    tool_call_id='d0b74dad-36ad-4487-9323-f2074857a65b'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"Merchant Agreements\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-078a8e43-721c-4dbb-a85e-0227d0910a8d-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "Merchant Agreements" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': 'e86de162-8580-4ca0-903b-e22941fbef4e',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1137,
+      'output_tokens': 39,
+      'total_tokens': 1176,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='42a05a67-7516-44b1-8a09-1e62e2f2dde1',
+    tool_call_id='e86de162-8580-4ca0-903b-e22941fbef4e'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"Payment Data Systems, Inc.\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-aa552b89-2722-4f84-a14f-d8f283dbccce-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "Payment Data Systems, Inc." AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': '1dc8a576-4e9f-41ed-acb1-3ca5647a817d',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1188,
+      'output_tokens': 42,
+      'total_tokens': 1230,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='57253be6-360c-459f-8fbb-7d404ce44621',
+    tool_call_id='1dc8a576-4e9f-41ed-acb1-3ca5647a817d'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'retrieve_web_knowledge_tool',
+        'arguments': '{"query": "site:ecfr.gov \\"Network 1\\" AND \\"Compliance\\" AND (\\"Financial Regulations\\" OR \\"Securities Law\\") after:2020"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-97b6d52c-1019-49d4-86bb-c08502518699-0',
+    tool_calls=[
+      {
+        'name': 'retrieve_web_knowledge_tool',
+        'args': {
+          'query': 'site:ecfr.gov "Network 1" AND "Compliance" AND ("Financial Regulations" OR "Securities Law") after:2020'
+        },
+        'id': 'f7694604-0839-47fe-b73f-2aa64c7a5070',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1242,
+      'output_tokens': 40,
+      'total_tokens': 1282,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='[{"status": "knowledge search completed"}]',
+    name='retrieve_web_knowledge_tool',
+    id='3a853f9a-7fb7-4da1-9243-8d850ed6c4dc',
+    tool_call_id='f7694604-0839-47fe-b73f-2aa64c7a5070'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_planner_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Knowledge Agent',
+    id='run-5ef5a02a-2209-4a40-8973-d16dbdcf8318-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_planner_agent',
+        'args': {
+          
+        },
+        'id': 'ec7f9351-1491-4a95-9dbd-fcf23d9842b6',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1294,
+      'output_tokens': 7,
+      'total_tokens': 1301,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Planner Agent',
+    name='transfer_to_planner_agent',
+    id='8b55f50b-ca91-4460-ba40-6974a5fef80a',
+    tool_call_id='ec7f9351-1491-4a95-9dbd-fcf23d9842b6'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_compliance_checker_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-f66b0526-e51a-4dec-8dea-82dee31fdd1b-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_compliance_checker_agent',
+        'args': {
+          
+        },
+        'id': 'd3590874-ce86-47f6-8ba4-36946218c836',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1427,
+      'output_tokens': 9,
+      'total_tokens': 1436,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Compliance Checker Agent',
+    name='transfer_to_compliance_checker_agent',
+    id='d8b17feb-b92e-4117-9e5e-ab3c38c9b203',
+    tool_call_id='d3590874-ce86-47f6-8ba4-36946218c836'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'compliance_check_tool',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Compliance Checker Agent',
+    id='run-d181ead9-a112-47c8-820d-0b255cf1a4fe-0',
+    tool_calls=[
+      {
+        'name': 'compliance_check_tool',
+        'args': {
+          
+        },
+        'id': '51eab126-2f92-40a2-913e-cc4227c6c9f5',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1982,
+      'output_tokens': 5,
+      'total_tokens': 1987,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content=[
+      
+    ],
+    name='compliance_check_tool',
+    id='a610b43c-6531-42c9-a117-9be04f2d3aee',
+    tool_call_id='51eab126-2f92-40a2-913e-cc4227c6c9f5'),
+    AIMessage(content='Based on the compliance check, no non-compliant clauses were found in the provided legal document. Therefore, no changes are suggested.',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_planner_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Compliance Checker Agent',
+    id='run-7f7badb3-85e7-4462-91d9-6e35c50df994-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_planner_agent',
+        'args': {
+          
+        },
+        'id': '77afdc3d-feb4-4d5a-94e9-300a21f02194',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1993,
+      'output_tokens': 34,
+      'total_tokens': 2027,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Planner Agent',
+    name='transfer_to_planner_agent',
+    id='3be05908-a137-4aa4-a963-433450ee06f6',
+    tool_call_id='77afdc3d-feb4-4d5a-94e9-300a21f02194'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_post_processor_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-a0dc70c9-5938-4ef9-9919-ca54fa0cebf5-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_post_processor_agent',
+        'args': {
+          
+        },
+        'id': 'e25bb915-b075-4f2c-b5da-03fe604e2919',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1483,
+      'output_tokens': 9,
+      'total_tokens': 1492,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Post Processor Agent',
+    name='transfer_to_post_processor_agent',
+    id='df65ae9b-c3d1-42ee-8257-12df76bba6e2',
+    tool_call_id='e25bb915-b075-4f2c-b5da-03fe604e2919'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'summarize_compliance_check_tool',
+        'arguments': '{"messages": "User: You are given a file path the document which you must preprocess to extract clauses. Once the clauses are extracted, fetch all relevant knowledge related to it. Based on the collected knowledge, you should check for compliance of these clauses. Explain the non-compliant clauses, suggest changes and summarize the results for the User. FILE PATH OF DOCUMENT: \\"./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt\\"\\n\\nAssistant: {\'transfer_to_pre_processor_agent_response\': {\'output\': \'Successfully transferred to Pre Processor Agent\'}}\\n\\nAssistant: {\'preprocess_document_tool_response\': {\'Document Class\': \'Legal Agreement - Affiliate Office Agreement\', \'Document Title\': \'Based on the provided text, the title of the document is:\\\\n\\\\n**NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT**\'}}\\n\\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\\n\\nAssistant: {\'transfer_to_knowledge_agent_response\': {\'output\': \'Successfully transferred to Knowledge Agent\'}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\\n\\nAssistant: {\'transfer_to_compliance_checker_agent_response\': {\'output\': \'Successfully transferred to Compliance Checker Agent\'}}\\n\\nAssistant: {\'check_knowledge_relevance_tool_response\': {\'output\': \\"[\'ISO sponsorship\', \'VISA\', \'MasterCard\', \'Member Bank\', \'Merchant Agreements\', \'Payment Data Systems, Inc.\', \'Network 1\']\\"}}\\n\\nAssistant: {\'transfer_to_knowledge_agent_response\': {\'output\': \'Successfully transferred to Knowledge Agent\'}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\\n\\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\\n\\nAssistant: {\'transfer_to_compliance_checker_agent_response\': {\'output\': \'Successfully transferred to Compliance Checker Agent\'}}\\n\\nAssistant: {\'compliance_check_tool_response\': {\'output\': []}}\\n\\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\\n\\nAssistant: {\'transfer_to_post_processor_agent_response\': {\'output\': \'Successfully transferred to Post Processor Agent\'}}"}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Post Processor Agent',
+    id='run-59adec9d-7287-45e3-b6f1-9b655f5479dc-0',
+    tool_calls=[
+      {
+        'name': 'summarize_compliance_check_tool',
+        'args': {
+          'messages': 'User: You are given a file path the document which you must preprocess to extract clauses. Once the clauses are extracted, fetch all relevant knowledge related to it. Based on the collected knowledge, you should check for compliance of these clauses. Explain the non-compliant clauses, suggest changes and summarize the results for the User. FILE PATH OF DOCUMENT: "./Original and Modified/modified_UsioInc_20040428_SB-2_EX-10.11_1723988_EX-10.11_Affiliate Agreement 2.pdf.txt"\n\nAssistant: {\'transfer_to_pre_processor_agent_response\': {\'output\': \'Successfully transferred to Pre Processor Agent\'}}\n\nAssistant: {\'preprocess_document_tool_response\': {\'Document Class\': \'Legal Agreement - Affiliate Office Agreement\', \'Document Title\': \'Based on the provided text, the title of the document is:\\n\\n**NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT**\'}}\n\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\n\nAssistant: {\'transfer_to_knowledge_agent_response\': {\'output\': \'Successfully transferred to Knowledge Agent\'}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\n\nAssistant: {\'transfer_to_compliance_checker_agent_response\': {\'output\': \'Successfully transferred to Compliance Checker Agent\'}}\n\nAssistant: {\'check_knowledge_relevance_tool_response\': {\'output\': "[\'ISO sponsorship\', \'VISA\', \'MasterCard\', \'Member Bank\', \'Merchant Agreements\', \'Payment Data Systems, Inc.\', \'Network 1\']"}}\n\nAssistant: {\'transfer_to_knowledge_agent_response\': {\'output\': \'Successfully transferred to Knowledge Agent\'}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'retrieve_web_knowledge_tool_response\': {\'output\': [{\'status\': \'knowledge search completed\'}]}}\n\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\n\nAssistant: {\'transfer_to_compliance_checker_agent_response\': {\'output\': \'Successfully transferred to Compliance Checker Agent\'}}\n\nAssistant: {\'compliance_check_tool_response\': {\'output\': []}}\n\nAssistant: {\'transfer_to_planner_agent_response\': {\'output\': \'Successfully transferred to Planner Agent\'}}\n\nAssistant: {\'transfer_to_post_processor_agent_response\': {\'output\': \'Successfully transferred to Post Processor Agent\'}}'
+        },
+        'id': 'ee7bd2b2-3809-4f99-b883-8fbdd5f1c494',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 1318,
+      'output_tokens': 736,
+      'total_tokens': 2054,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='## Compliance Check Summary\n\nThis summary outlines the compliance check results for the provided "NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT".\n\n**1. Number of Clauses Checked:** 11\n\n**2. Compliance Status:**\n\n*   Compliant Clauses: 11\n*   Non-Compliant Clauses: 0\n\n**3. Non-Compliant Clauses:**\n\n*   There are no non-compliant clauses identified in this document.\n\n**4. Overall Compliance Status:**\n\n*   The document is currently considered **compliant** based on the analyzed clauses.\n\n**5. Recommendations for Further Action:**\n\n*   While the analyzed clauses appear compliant, a complete legal review is recommended to ensure full compliance, considering all aspects of the agreement and relevant laws.\n*   Future reviews should consider changes in applicable laws and regulations.\n\n**6. References to Relevant Laws and Regulations:**\n\n*   The agreement references VISA, MasterCard, NACHA, and Member Bank rules and regulations. Specific laws or regulations governing affiliate agreements are not explicitly mentioned but would fall under general contract law principles.\n*   The agreement also references Virginia Corporation law, as Network 1 Financial Corporation is a Virginia corporation.\n\n**7. Other Important Information:**\n\n*   The agreement includes clauses on termination, indemnification, dispute resolution (arbitration), and the entire agreement. These clauses should be reviewed carefully for potential risks and implications.\n*   The agreement specifies that Virginia law governs disputes.\n\n**8. Process Summary:**\n\n1.  **Document Analysis:** The provided "NETWORK 1 FINANCIAL CORPORATION AFFILIATE OFFICE AGREEMENT" was analyzed.\n2.  **Clause Extraction:** 11 key clauses were extracted from the document, covering aspects such as agreement introduction, term and renewal, termination, compensation, indemnification, dispute resolution, entire agreement, obligations of affiliates, rights of Network 1, restrictions on affiliate, and independent contractor status.\n3.  **Compliance Check:** Each extracted clause was checked against relevant legal and regulatory standards.\n4.  **Knowledge Retrieval (N/A):**  In this case, no knowledge retrieval was needed as there were no non-compliant clauses.\n5.  **Summary Generation:**  Based on the compliance check results, this summary was generated to provide a concise overview of the findings.',
+    name='summarize_compliance_check_tool',
+    id='6275aac7-a800-4637-ab65-2b7bd6aafae5',
+    tool_call_id='ee7bd2b2-3809-4f99-b883-8fbdd5f1c494'),
+    AIMessage(content='',
+    additional_kwargs={
+      'function_call': {
+        'name': 'transfer_to_planner_agent',
+        'arguments': '{}'
+      }
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Post Processor Agent',
+    id='run-017f40b1-2177-40b0-ac27-6cbf7f867a89-0',
+    tool_calls=[
+      {
+        'name': 'transfer_to_planner_agent',
+        'args': {
+          
+        },
+        'id': 'fa2862e7-5274-41c7-9dcf-4acc048cb98d',
+        'type': 'tool_call'
+      }
+    ],
+    usage_metadata={
+      'input_tokens': 2538,
+      'output_tokens': 7,
+      'total_tokens': 2545,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    }),
+    ToolMessage(content='Successfully transferred to Planner Agent',
+    name='transfer_to_planner_agent',
+    id='1544352b-22c1-484d-bfb6-4c4e030726b3',
+    tool_call_id='fa2862e7-5274-41c7-9dcf-4acc048cb98d'),
+    AIMessage(content='The document has been analyzed for discrepancies and compliance issues. The Pre Processor Agent preprocessed the document, the Knowledge Agent retrieved relevant legal compliance knowledge, the Compliance Checker Agent checked the compliance of clauses, and the Post Processor Agent summarized the issues and finalized the output. The compliance check revealed no non-compliant clauses. A summary of the compliance check results has been generated.',
+    additional_kwargs={
+      
+    },
+    response_metadata={
+      'prompt_feedback': {
+        'block_reason': 0,
+        'safety_ratings': [
+          
+        ]
+      },
+      'finish_reason': 'STOP',
+      'safety_ratings': [
+        
+      ]
+    },
+    name='Planner Agent',
+    id='run-9757c5f1-1e80-443f-8292-d49c2d7c45f8-0',
+    usage_metadata={
+      'input_tokens': 2748,
+      'output_tokens': 74,
+      'total_tokens': 2822,
+      'input_token_details': {
+        'cache_read': 0
+      }
+    })
+  ],
+  'active_agent': 'Planner Agent'
+}
